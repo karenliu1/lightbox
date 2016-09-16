@@ -1,0 +1,26 @@
+@BORDER_RADIUS: 5px;
+@GUTTER_SM: 4px;
+@GUTTER_LG: 32px;
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body {
+    margin: 0;
+}
+
+#photos-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: @GUTTER_LG;
+}
+
+.thumbnail {
+    border-radius: @BORDER_RADIUS;
+    margin: @GUTTER_SM;
+    animation: fadeIn 1s forwards;
+}

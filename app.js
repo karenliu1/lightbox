@@ -27,7 +27,7 @@ window.onload = function() {
         var photosHTML = photos.map(function(photo) {
             var photoURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
                 photo.server + '/' + photo.id + '_' + photo.secret + '_s.jpg';
-            return '<img src="' + photoURL + '" />';
+            return '<img src="' + photoURL + '" class="thumbnail" />';
         }).slice(0, 8); // TODO remove cap
         photosContainer.innerHTML = photosHTML.join('\n');
     }, function(errorStatus) {
