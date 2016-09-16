@@ -46,6 +46,13 @@ body.lightbox-open {
 #lightbox-container #lightbox-photo {
   margin: auto;
   z-index: 3;
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 200ms, transform 200ms;
+}
+#lightbox-container #lightbox-photo.lightbox-photo-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 .thumbnail-wrapper {
   cursor: pointer;

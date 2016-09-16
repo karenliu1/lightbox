@@ -68,6 +68,15 @@ body.lightbox-open {
     #lightbox-photo {
         margin: auto;
         z-index: @ZINDEX_LIGHTBOX_PHOTO;
+
+        // Fade in and down when it becomes visible
+        opacity: 0;
+        transform: translateY(-100px);
+        transition: opacity @TRANSITION_FAST, transform @TRANSITION_FAST;
+        &.lightbox-photo-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }
 

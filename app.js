@@ -38,29 +38,39 @@ function onImageLoad(imageEl, callback) {
     }
 }
 
+function addClassWhenLoaded(element, className) {
+    onImageLoad(element, function() {
+        // NOTE: setTimeout(0) so that images transition in even when cached
+        setTimeout(function() {
+            element.className += ' ' + className;
+        }, 100);
+    });
+}
+
 function onOpenLightbox(photo) {
     document.body.className = 'lightbox-open';
 
+    // Set photo src
     var photoEl = document.getElementById('lightbox-photo');
     photoEl.setAttribute('src', getPhotoUrl(photo, 'z'));
+
+    // Animate first photo in
+    addClassWhenLoaded(photoEl, 'lightbox-photo-visible');
 }
 
 function onCloseLightbox() {
     document.body.className = '';
+
+    var photoEl = document.getElementById('lightbox-photo');
+    photoEl.className = '';
+    photoEl.setAttribute('src', ''); // TODO: set a url here
 }
 
 function createThumbnailEl(photo) {
     var photoEl = document.createElement('img');
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
     photoEl.className = 'thumbnail';
-
-    // Invisible until image is fully loaded
-    onImageLoad(photoEl, function() {
-        // NOTE: setTimeout(0) so that images fade in even when cached
-        setTimeout(function() {
-            photoEl.className += ' thumbnail-visible';
-        }, 0);
-    });
+    addClassWhenLoaded(photoEl, 'thumbnail-visible');
 
     var overlayTextEl = document.createElement('div');
     overlayTextEl.className = 'thumbnail-overlay-text';
