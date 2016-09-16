@@ -3,6 +3,9 @@ var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
 var PHOTOS_CONTAINER, LIGHTBOX_BG_EL, LIGHTBOX_PHOTO_EL;
 
+var photos = [];
+var currentPhotoIndex = null;
+
 function getPhotoUrl(photo, options) {
     return 'https://farm' + photo.farm + '.staticflickr.com/' +
         photo.server + '/' + photo.id + '_' + photo.secret + '_' + options + '.jpg';
@@ -40,7 +43,9 @@ function onImageLoad(imageEl, callback) {
     }
 }
 
-function onOpenLightbox(photo) {
+function onOpenLightbox(photo, index) {
+    currentPhotoIndex = index;
+
     document.body.className = 'lightbox-open';
 
     LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
@@ -54,13 +59,64 @@ function onOpenLightbox(photo) {
 }
 
 function onCloseLightbox() {
+    currentPhotoIndex = null;
+
     document.body.className = '';
 
     LIGHTBOX_PHOTO_EL.className = '';
     LIGHTBOX_PHOTO_EL.src = '';
 }
 
-function createThumbnailEl(photo) {
+function onPrevPhoto() {
+    currentPhotoIndex -= 1; // TODO: boundary checks
+
+    // Set the src to the next photo
+    var photo = photos[currentPhotoIndex];
+    LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
+
+    // Make the photo invisible and the spinner visible
+    LIGHTBOX_BG_EL.className = 'is-loading';
+    LIGHTBOX_PHOTO_EL.className = '';
+
+    // On image load, animate the first photo in and hide the spinner
+    onImageLoad(LIGHTBOX_PHOTO_EL, function() {
+        LIGHTBOX_PHOTO_EL.className += ' is-visible-from-left';
+        LIGHTBOX_BG_EL.className = '';
+    });
+}
+
+function onNextPhoto() {
+    currentPhotoIndex += 1; // TODO: boundary checks
+
+    // Set the src to the next photo
+    var photo = photos[currentPhotoIndex];
+    LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
+
+    // Make the photo invisible and the spinner visible
+    LIGHTBOX_BG_EL.className = 'is-loading';
+    LIGHTBOX_PHOTO_EL.className = '';
+
+    // On image load, animate the first photo in and hide the spinner
+    onImageLoad(LIGHTBOX_PHOTO_EL, function() {
+        LIGHTBOX_PHOTO_EL.className += ' is-visible-from-right';
+        LIGHTBOX_BG_EL.className = '';
+    });
+}
+
+function onKeyDown(e) {
+    // TODO: do nothing if lightbox is closed or no photos have loaded
+
+    switch (e.keyCode) {
+        case 27: // esc
+            return onCloseLightbox();
+        case 37: // left arrow
+            return onPrevPhoto();
+        case 39: // right arrow
+            return onNextPhoto();
+    }
+}
+
+function createThumbnailEl(photo, index) {
     var photoEl = document.createElement('img');
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
     photoEl.className = 'thumbnail';
@@ -68,7 +124,7 @@ function createThumbnailEl(photo) {
     var wrapperEl = document.createElement('div');
     wrapperEl.className = 'thumbnail-wrapper is-loading';
     wrapperEl.appendChild(photoEl);
-    wrapperEl.onclick = function() { onOpenLightbox(photo); }
+    wrapperEl.onclick = function() { onOpenLightbox(photo, index); }
 
     onImageLoad(photoEl, function() {
         photoEl.className += ' is-visible';
@@ -78,8 +134,9 @@ function createThumbnailEl(photo) {
     return wrapperEl;
 }
 
-function initLightboxHandlers() {
+function initAppHandlers() {
     LIGHTBOX_BG_EL.onclick = onCloseLightbox;
+    document.addEventListener('keydown', onKeyDown, false);
 }
 
 window.onload = function() {
@@ -88,7 +145,7 @@ window.onload = function() {
     LIGHTBOX_BG_EL = document.getElementById('lightbox-background');
 
     requestPhotoset('72157639990929493', function(response) {
-        var photos = response.photoset.photo;
+        photos = response.photoset.photo;
         var photosEls = photos.map(createThumbnailEl);
 
         for (var photoEl of photosEls) {
@@ -98,5 +155,5 @@ window.onload = function() {
         alert('there was an error!'); // TODO
     });
 
-    initLightboxHandlers();
+    initAppHandlers();
 };
