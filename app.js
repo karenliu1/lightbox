@@ -24,12 +24,15 @@ window.onload = function() {
     requestPhotoset('72157639990929493', function(response) {
         var photos = response.photoset.photo;
         var photosContainer = document.getElementById('photos-container');
-        var photosHTML = photos.map(function(photo) {
+        var photosHTML = photos.forEach(function(photo) {
             var photoURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
                 photo.server + '/' + photo.id + '_' + photo.secret + '_s.jpg';
-            return '<img src="' + photoURL + '" class="thumbnail" />';
-        }).slice(0, 8); // TODO remove cap
-        photosContainer.innerHTML = photosHTML.join('\n');
+            var imageEl = document.createElement('img');
+            imageEl.setAttribute('src', photoURL);
+            imageEl.className = 'thumbnail';
+
+            photosContainer.appendChild(imageEl);
+        });
     }, function(errorStatus) {
         alert('there was an error!'); // TODO
     });
