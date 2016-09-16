@@ -20,19 +20,47 @@ function requestPhotoset(photosetID, resolve, reject) {
     };
 }
 
+function onImageLoad(imageEl, callback) {
+    if (imageEl.complete) {
+        callback();
+    } else {
+        imageEl.onload = function() {
+            callback();
+
+            // Clear onLoad, according to http://stackoverflow.com/a/52597/4794892
+            imageEl.onload = function() {};
+        }
+    }
+}
+
+function createPhotoEl(photo) {
+    var photoURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
+        photo.server + '/' + photo.id + '_' + photo.secret + '_s.jpg';
+
+    var photoEl = document.createElement('img');
+    photoEl.setAttribute('src', photoURL);
+    photoEl.className = 'thumbnail';
+
+    // Invisible until image is fully loaded
+    onImageLoad(photoEl, function() {
+        // NOTE: setTimeout(0) so that images fade in even when cached
+        setTimeout(function() {
+            photoEl.className += ' thumbnail-visible';
+        }, 0);
+    });
+
+    return photoEl;
+}
+
 window.onload = function() {
     requestPhotoset('72157639990929493', function(response) {
         var photos = response.photoset.photo;
         var photosContainer = document.getElementById('photos-container');
-        var photosHTML = photos.forEach(function(photo) {
-            var photoURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
-                photo.server + '/' + photo.id + '_' + photo.secret + '_s.jpg';
-            var imageEl = document.createElement('img');
-            imageEl.setAttribute('src', photoURL);
-            imageEl.className = 'thumbnail';
+        var photosEls = photos.map(createPhotoEl);
 
-            photosContainer.appendChild(imageEl);
-        });
+        for (var photoEl of photosEls) {
+            photosContainer.appendChild(photoEl);
+        }
     }, function(errorStatus) {
         alert('there was an error!'); // TODO
     });

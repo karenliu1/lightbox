@@ -2,11 +2,6 @@
 @GUTTER_SM: 4px;
 @GUTTER_LG: 32px;
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
 body {
     margin: 0;
 }
@@ -22,5 +17,14 @@ body {
 .thumbnail {
     border-radius: @BORDER_RADIUS;
     margin: @GUTTER_SM;
-    animation: fadeIn 1s forwards;
+    width: 75px;
+    height: 75px;
+
+    // Invisible until image is fully loaded
+    transition: opacity 1s;
+    opacity: 0;
+
+    &.thumbnail-visible {
+        opacity: 1;
+    }
 }
