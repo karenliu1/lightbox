@@ -65,18 +65,9 @@ function createThumbnailEl(photo) {
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
     photoEl.className = 'thumbnail';
 
-    var overlayTextEl = document.createElement('div');
-    overlayTextEl.className = 'thumbnail-overlay-text';
-    overlayTextEl.innerText = 'View';
-
-    var overlayEl = document.createElement('div');
-    overlayEl.className = 'thumbnail-overlay';
-    overlayEl.appendChild(overlayTextEl);
-
     var wrapperEl = document.createElement('div');
     wrapperEl.className = 'thumbnail-wrapper is-loading';
     wrapperEl.appendChild(photoEl);
-    wrapperEl.appendChild(overlayEl);
     wrapperEl.onclick = function() { onOpenLightbox(photo); }
 
     onImageLoad(photoEl, function() {
