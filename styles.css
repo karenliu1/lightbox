@@ -60,6 +60,7 @@ body.lightbox-open {
 }
 .thumbnail-wrapper {
   cursor: pointer;
+  margin: 4px;
   overflow: hidden;
   position: relative;
   width: 150px;
