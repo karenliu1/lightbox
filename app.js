@@ -1,6 +1,8 @@
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
+var PHOTOS_CONTAINER, LIGHTBOX_BG_EL, LIGHTBOX_PHOTO_EL;
+
 function getPhotoUrl(photo, options) {
     return 'https://farm' + photo.farm + '.staticflickr.com/' +
         photo.server + '/' + photo.id + '_' + photo.secret + '_' + options + '.jpg';
@@ -38,39 +40,30 @@ function onImageLoad(imageEl, callback) {
     }
 }
 
-function addClassWhenLoaded(element, className) {
-    onImageLoad(element, function() {
-        // NOTE: setTimeout(0) so that images transition in even when cached
-        setTimeout(function() {
-            element.className += ' ' + className;
-        }, 100);
-    });
-}
-
 function onOpenLightbox(photo) {
     document.body.className = 'lightbox-open';
 
-    // Set photo src
-    var photoEl = document.getElementById('lightbox-photo');
-    photoEl.setAttribute('src', getPhotoUrl(photo, 'z'));
+    LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
+    LIGHTBOX_BG_EL.className = 'is-loading';
 
-    // Animate first photo in
-    addClassWhenLoaded(photoEl, 'lightbox-photo-visible');
+    // Animate first photo in, hide the spinner
+    onImageLoad(LIGHTBOX_PHOTO_EL, function() {
+        LIGHTBOX_PHOTO_EL.className += ' is-visible';
+        LIGHTBOX_BG_EL.className = '';
+    });
 }
 
 function onCloseLightbox() {
     document.body.className = '';
 
-    var photoEl = document.getElementById('lightbox-photo');
-    photoEl.className = '';
-    photoEl.setAttribute('src', ''); // TODO: set a url here
+    LIGHTBOX_PHOTO_EL.className = '';
+    LIGHTBOX_PHOTO_EL.src = '';
 }
 
 function createThumbnailEl(photo) {
     var photoEl = document.createElement('img');
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
     photoEl.className = 'thumbnail';
-    addClassWhenLoaded(photoEl, 'thumbnail-visible');
 
     var overlayTextEl = document.createElement('div');
     overlayTextEl.className = 'thumbnail-overlay-text';
@@ -81,27 +74,34 @@ function createThumbnailEl(photo) {
     overlayEl.appendChild(overlayTextEl);
 
     var wrapperEl = document.createElement('div');
-    wrapperEl.className = 'thumbnail-wrapper';
+    wrapperEl.className = 'thumbnail-wrapper is-loading';
     wrapperEl.appendChild(photoEl);
     wrapperEl.appendChild(overlayEl);
     wrapperEl.onclick = function() { onOpenLightbox(photo); }
+
+    onImageLoad(photoEl, function() {
+        photoEl.className += ' is-visible';
+        wrapperEl.className = 'thumbnail-wrapper';
+    });
 
     return wrapperEl;
 }
 
 function initLightboxHandlers() {
-    var lightboxBgEl = document.getElementById('lightbox-background');
-    lightboxBgEl.onclick = onCloseLightbox;
+    LIGHTBOX_BG_EL.onclick = onCloseLightbox;
 }
 
 window.onload = function() {
+    PHOTOS_CONTAINER = document.getElementById('photos-container');
+    LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
+    LIGHTBOX_BG_EL = document.getElementById('lightbox-background');
+
     requestPhotoset('72157639990929493', function(response) {
         var photos = response.photoset.photo;
-        var photosContainer = document.getElementById('photos-container');
         var photosEls = photos.map(createThumbnailEl);
 
         for (var photoEl of photosEls) {
-            photosContainer.appendChild(photoEl);
+            PHOTOS_CONTAINER.appendChild(photoEl);
         }
     }, function(errorStatus) {
         alert('there was an error!'); // TODO

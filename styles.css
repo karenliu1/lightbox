@@ -34,25 +34,29 @@ body.lightbox-open {
   pointer-events: auto;
 }
 #lightbox-container #lightbox-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background-color: #000;
   opacity: 0.9;
   z-index: 2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+}
+#lightbox-container #lightbox-background.is-loading {
+  background-image: url(loader.gif);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 #lightbox-container #lightbox-photo {
   margin: auto;
   z-index: 3;
   opacity: 0;
-  transform: translateY(-100px);
-  transition: opacity 200ms, transform 200ms;
+  pointer-events: none;
 }
-#lightbox-container #lightbox-photo.lightbox-photo-visible {
-  opacity: 1;
-  transform: translateY(0);
+#lightbox-container #lightbox-photo.is-visible {
+  animation: fadeInDown 200ms forwards;
+  pointer-events: auto;
 }
 .thumbnail-wrapper {
   cursor: pointer;
@@ -61,19 +65,24 @@ body.lightbox-open {
   width: 150px;
   height: 150px;
 }
+.thumbnail-wrapper.is-loading {
+  background-image: url(loaderDark.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .thumbnail-wrapper .thumbnail {
-  transition: opacity 1s, transform 200ms;
+  transition: transform 200ms;
   opacity: 0;
 }
-.thumbnail-wrapper .thumbnail.thumbnail-visible {
-  opacity: 1;
+.thumbnail-wrapper .thumbnail.is-visible {
+  animation: fadeIn 1s forwards;
 }
 .thumbnail-wrapper .thumbnail-overlay {
   position: absolute;
-  left: 0;
   top: 0;
   right: 0;
   bottom: 0;
+  left: 0;
   background-color: #000;
   display: flex;
   opacity: 0;
@@ -90,4 +99,22 @@ body.lightbox-open {
 }
 .thumbnail-wrapper:hover .thumbnail-overlay {
   opacity: 0.8;
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -11,6 +11,14 @@
 @ZINDEX_LIGHTBOX_BG: 2;
 @ZINDEX_LIGHTBOX_PHOTO: 3;
 
+.positionFill() {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
 body {
     font-family: 'Raleway', sans-serif;
     margin: 0 10%;
@@ -54,28 +62,27 @@ body.lightbox-open {
     }
 
     #lightbox-background {
+        .positionFill();
         background-color: #000;
         opacity: 0.9;
         z-index: @ZINDEX_LIGHTBOX_BG;
 
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        &.is-loading {
+            background-image: url(loader.gif);
+            background-repeat: no-repeat;
+            background-position: center;
+        }
     }
 
     #lightbox-photo {
         margin: auto;
         z-index: @ZINDEX_LIGHTBOX_PHOTO;
 
-        // Fade in and down when it becomes visible
         opacity: 0;
-        transform: translateY(-100px);
-        transition: opacity @TRANSITION_FAST, transform @TRANSITION_FAST;
-        &.lightbox-photo-visible {
-            opacity: 1;
-            transform: translateY(0);
+        pointer-events: none;
+        &.is-visible {
+            animation: fadeInDown @TRANSITION_FAST forwards;
+            pointer-events: auto;
         }
     }
 }
@@ -87,27 +94,27 @@ body.lightbox-open {
     width: @THUMBNAIL_SIZE;
     height: @THUMBNAIL_SIZE;
 
-    .thumbnail {
-        transition: opacity @TRANSITION, transform @TRANSITION_FAST;
+    &.is-loading {
+        background-image: url(loaderDark.gif);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 
-        // Invisible until image is fully loaded
+    .thumbnail {
+        transition: transform @TRANSITION_FAST; // For scaling on hover
+
         opacity: 0;
-        &.thumbnail-visible {
-            opacity: 1;
+        &.is-visible {
+            animation: fadeIn @TRANSITION forwards;
         }
     }
 
     .thumbnail-overlay {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-
+        .positionFill();
         background-color: #000;
         display: flex; // For centering the text
         opacity: 0;
-        transition: opacity @TRANSITION_FAST;
+        transition: opacity @TRANSITION_FAST; // For fading on hover
 
         .thumbnail-overlay-text {
             border: 1px solid #fff;
@@ -126,4 +133,20 @@ body.lightbox-open {
             opacity: 0.8;
         }
     }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
