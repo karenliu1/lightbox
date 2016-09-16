@@ -2,6 +2,11 @@
 @GUTTER_SM: 4px;
 @GUTTER_LG: 32px;
 
+@THUMBNAIL_SIZE: 150px;
+
+@TRANSITION: 1s;
+@TRANSITION_FAST: 200ms;
+
 body {
     margin: 0;
 }
@@ -15,16 +20,60 @@ body {
 }
 
 .thumbnail {
-    border-radius: @BORDER_RADIUS;
-    margin: @GUTTER_SM;
-    width: 150px;
-    height: 150px;
+    transition: opacity @TRANSITION, transform @TRANSITION_FAST;
 
     // Invisible until image is fully loaded
-    transition: opacity 1s;
     opacity: 0;
-
     &.thumbnail-visible {
         opacity: 1;
+    }
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: #000;
+    display: flex; // For centering the text
+    opacity: 0;
+    transition: opacity @TRANSITION_FAST;
+
+    .thumbnail-overlay-text {
+        border: 1px solid #fff;
+        color: #fff;
+        margin: auto; // Centered magically with flexbox!
+        opacity: 0;
+        padding: @GUTTER_SM;
+    }
+}
+
+.thumbnail-wrapper {
+    cursor: pointer;
+    margin: 1px;
+    overflow: hidden;
+    position: relative;
+    width: @THUMBNAIL_SIZE;
+    height: @THUMBNAIL_SIZE;
+
+    // Center thumbnail image within wrapper
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        .thumbnail {
+            transform: scale(1.3);
+        }
+
+        .thumbnail-overlay {
+            opacity: 0.8;
+        }
+
+        .thumbnail-overlay-text {
+            opacity: 1;
+        }
     }
 }

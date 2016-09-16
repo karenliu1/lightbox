@@ -49,7 +49,20 @@ function createPhotoEl(photo) {
         }, 0);
     });
 
-    return photoEl;
+    var overlayTextEl = document.createElement('div');
+    overlayTextEl.className = 'thumbnail-overlay-text';
+    overlayTextEl.innerText = 'View';
+
+    var overlayEl = document.createElement('div');
+    overlayEl.className = 'thumbnail-overlay';
+    overlayEl.appendChild(overlayTextEl);
+
+    var wrapperEl = document.createElement('div');
+    wrapperEl.className = 'thumbnail-wrapper';
+    wrapperEl.appendChild(photoEl);
+    wrapperEl.appendChild(overlayEl);
+
+    return wrapperEl;
 }
 
 window.onload = function() {
