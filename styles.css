@@ -11,8 +11,8 @@ body {
 .thumbnail {
   border-radius: 5px;
   margin: 4px;
-  width: 75px;
-  height: 75px;
+  width: 150px;
+  height: 150px;
   transition: opacity 1s;
   opacity: 0;
 }

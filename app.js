@@ -35,7 +35,7 @@ function onImageLoad(imageEl, callback) {
 
 function createPhotoEl(photo) {
     var photoURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
-        photo.server + '/' + photo.id + '_' + photo.secret + '_s.jpg';
+        photo.server + '/' + photo.id + '_' + photo.secret + '_q.jpg';
 
     var photoEl = document.createElement('img');
     photoEl.setAttribute('src', photoURL);
