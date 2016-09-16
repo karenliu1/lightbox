@@ -1,5 +1,6 @@
 @BORDER_RADIUS: 5px;
 @GUTTER_SM: 4px;
+@GUTTER_MD: 8px;
 @GUTTER_LG: 32px;
 
 @THUMBNAIL_SIZE: 150px;
@@ -7,62 +8,105 @@
 @TRANSITION: 1s;
 @TRANSITION_FAST: 200ms;
 
+@ZINDEX_LIGHTBOX_BG: 2;
+@ZINDEX_LIGHTBOX_PHOTO: 3;
+
 body {
     font-family: 'Raleway', sans-serif;
-    margin: 0;
+    margin: 0 10%;
+    overflow: auto;
 }
 
-#photos-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: @GUTTER_LG;
-}
-
-.thumbnail {
-    transition: opacity @TRANSITION, transform @TRANSITION_FAST;
-
-    // Invisible until image is fully loaded
-    opacity: 0;
-    &.thumbnail-visible {
-        opacity: 1;
+@media (max-width: 400px) {
+    body {
+        margin: 0 @GUTTER_MD;
     }
 }
 
-.thumbnail-overlay {
-    position: absolute;
-    left: 0;
+body.lightbox-open {
+    overflow: hidden;
+}
+
+#photos-container {
+    margin: @GUTTER_LG auto;
+    text-align: center;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#lightbox-container {
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity @TRANSITION_FAST;
+
+    position: fixed;
     top: 0;
+    left: 0;
     right: 0;
     bottom: 0;
 
-    background-color: #000;
-    display: flex; // For centering the text
-    opacity: 0;
-    transition: opacity @TRANSITION_FAST;
+    .lightbox-open & {
+        opacity: 1;
+        pointer-events: auto;
+    }
 
-    .thumbnail-overlay-text {
-        border: 1px solid #fff;
-        color: #fff;
-        margin: auto; // Centered magically with flexbox!
-        opacity: 0;
-        padding: @GUTTER_SM;
+    #lightbox-background {
+        background-color: #000;
+        opacity: 0.9;
+        z-index: @ZINDEX_LIGHTBOX_BG;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    #lightbox-photo {
+        margin: auto;
+        z-index: @ZINDEX_LIGHTBOX_PHOTO;
     }
 }
 
 .thumbnail-wrapper {
     cursor: pointer;
-    margin: 1px;
     overflow: hidden;
     position: relative;
     width: @THUMBNAIL_SIZE;
     height: @THUMBNAIL_SIZE;
 
-    // Center thumbnail image within wrapper
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .thumbnail {
+        transition: opacity @TRANSITION, transform @TRANSITION_FAST;
+
+        // Invisible until image is fully loaded
+        opacity: 0;
+        &.thumbnail-visible {
+            opacity: 1;
+        }
+    }
+
+    .thumbnail-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+
+        background-color: #000;
+        display: flex; // For centering the text
+        opacity: 0;
+        transition: opacity @TRANSITION_FAST;
+
+        .thumbnail-overlay-text {
+            border: 1px solid #fff;
+            color: #fff;
+            margin: auto; // Centered magically with flexbox!
+            padding: @GUTTER_SM;
+        }
+    }
 
     &:hover {
         .thumbnail {
@@ -71,10 +115,6 @@ body {
 
         .thumbnail-overlay {
             opacity: 0.8;
-        }
-
-        .thumbnail-overlay-text {
-            opacity: 1;
         }
     }
 }

@@ -1,6 +1,11 @@
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
+function getPhotoUrl(photo, options) {
+    return 'https://farm' + photo.farm + '.staticflickr.com/' +
+        photo.server + '/' + photo.id + '_' + photo.secret + '_' + options + '.jpg';
+}
+
 function requestPhotoset(photosetID, resolve, reject) {
     var photosetUrl = FLICKR_HOST +
         '?method=flickr.photosets.getPhotos' +
@@ -33,12 +38,20 @@ function onImageLoad(imageEl, callback) {
     }
 }
 
-function createPhotoEl(photo) {
-    var photoURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
-        photo.server + '/' + photo.id + '_' + photo.secret + '_q.jpg';
+function onOpenLightbox(photo) {
+    document.body.className = 'lightbox-open';
 
+    var photoEl = document.getElementById('lightbox-photo');
+    photoEl.setAttribute('src', getPhotoUrl(photo, 'z'));
+}
+
+function onCloseLightbox() {
+    document.body.className = '';
+}
+
+function createThumbnailEl(photo) {
     var photoEl = document.createElement('img');
-    photoEl.setAttribute('src', photoURL);
+    photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
     photoEl.className = 'thumbnail';
 
     // Invisible until image is fully loaded
@@ -61,15 +74,21 @@ function createPhotoEl(photo) {
     wrapperEl.className = 'thumbnail-wrapper';
     wrapperEl.appendChild(photoEl);
     wrapperEl.appendChild(overlayEl);
+    wrapperEl.onclick = function() { onOpenLightbox(photo); }
 
     return wrapperEl;
+}
+
+function initLightboxHandlers() {
+    var lightboxBgEl = document.getElementById('lightbox-background');
+    lightboxBgEl.onclick = onCloseLightbox;
 }
 
 window.onload = function() {
     requestPhotoset('72157639990929493', function(response) {
         var photos = response.photoset.photo;
         var photosContainer = document.getElementById('photos-container');
-        var photosEls = photos.map(createPhotoEl);
+        var photosEls = photos.map(createThumbnailEl);
 
         for (var photoEl of photosEls) {
             photosContainer.appendChild(photoEl);
@@ -77,4 +96,6 @@ window.onload = function() {
     }, function(errorStatus) {
         alert('there was an error!'); // TODO
     });
+
+    initLightboxHandlers();
 };
