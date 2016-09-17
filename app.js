@@ -2,10 +2,18 @@ var TRANSITION_FAST_MS = 200;
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
-var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_BG_EL, LIGHTBOX_PHOTO_EL;
+var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
+
+// Modified from http://stackoverflow.com/a/22119674/4794892
+function findAncestor(element, className) {
+    while (element && !element.classList.contains(className)) {
+        element = element.parentElement;
+    }
+    return element;
+}
 
 function addClass(element, className) {
     element.className += ' ' + className;
@@ -90,6 +98,7 @@ function animatePhotoOut(element, animationClass) {
 function addPhotoElement(photo) {
     // Create img tag element
     var photoImgEl = document.createElement('img');
+    addClass(photoImgEl, 'lightbox-photo-img');
     photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
 
     // Create wrapper element
@@ -150,6 +159,7 @@ function createThumbnailEl(photo, index) {
     addClass(wrapperEl, 'thumbnail-wrapper is-loading');
     wrapperEl.appendChild(photoEl);
     wrapperEl.onclick = function() { onOpenLightbox(photo, index); }
+    // TODO: reduce number of click handlers?
 
     onImageLoad(photoEl, function() {
         addClass(photoEl, 'is-visible');
@@ -160,7 +170,12 @@ function createThumbnailEl(photo, index) {
 }
 
 function initAppHandlers() {
-    LIGHTBOX_BG_EL.onclick = onCloseLightbox;
+    LIGHTBOX_CONTAINER_EL.onclick = function(event) {
+        // If not clicking on the photo itself, close the lightbox
+        if (findAncestor(event.target, 'lightbox-photo-img') === null) {
+            onCloseLightbox();
+        }
+    }
     document.addEventListener('keydown', onKeyDown, false);
 }
 
@@ -168,7 +183,6 @@ window.onload = function() {
     PHOTOS_CONTAINER_EL = document.getElementById('photos-container');
     LIGHTBOX_CONTAINER_EL = document.getElementById('lightbox-container');
     LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
-    LIGHTBOX_BG_EL = document.getElementById('lightbox-background');
 
     requestPhotoset('72157639990929493', function(response) {
         photos = response.photoset.photo;
