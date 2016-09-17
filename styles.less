@@ -67,30 +67,27 @@ body.lightbox-open {
         background-color: #000;
         opacity: 0.9;
         z-index: @ZINDEX_LIGHTBOX_BG;
-
-        &.is-loading {
-            background-image: url(loader.gif);
-            background-repeat: no-repeat;
-            background-position: center;
-        }
     }
 
     #lightbox-photo {
         margin: auto;
         z-index: @ZINDEX_LIGHTBOX_PHOTO;
 
-        opacity: 0;
-        pointer-events: none;
-        &.is-visible {
-            animation: fadeInDown @TRANSITION_FAST forwards;
-            pointer-events: auto;
+        &.is-loading {
+            background-image: url(loader.gif);
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 1px solid #888;
         }
-        &.is-visible-from-right {
-            animation: fadeInLeft @TRANSITION_FAST forwards;
-            pointer-events: auto;
+
+        img {
+            display: block; // no space inside of lightbox-photo border
+            opacity: 0;
+            pointer-events: none;
         }
-        &.is-visible-from-left {
-            animation: fadeInRight @TRANSITION_FAST forwards;
+
+        &.is-visible img {
+            animation: fadeIn @TRANSITION_FAST forwards;
             pointer-events: auto;
         }
     }

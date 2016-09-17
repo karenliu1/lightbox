@@ -1,7 +1,7 @@
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
-var PHOTOS_CONTAINER, LIGHTBOX_BG_EL, LIGHTBOX_PHOTO_EL;
+var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_BG_EL, LIGHTBOX_PHOTO_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
@@ -60,13 +60,13 @@ function onOpenLightbox(photo, index) {
 
     addClass(document.body, 'lightbox-open');
 
-    LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
-    addClass(LIGHTBOX_BG_EL, 'is-loading');
+    LIGHTBOX_PHOTO_EL.children[0].setAttribute('src', getPhotoUrl(photo, 'z'));
+    addClass(LIGHTBOX_PHOTO_EL, 'is-loading');
 
     // Animate first photo in, hide the spinner
-    onImageLoad(LIGHTBOX_PHOTO_EL, function() {
+    onImageLoad(LIGHTBOX_PHOTO_EL.children[0], function() {
         addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-        removeClass(LIGHTBOX_BG_EL, 'is-loading');
+        removeClass(LIGHTBOX_PHOTO_EL, 'is-loading');
     });
 }
 
@@ -76,7 +76,7 @@ function onCloseLightbox() {
     removeClass(document.body, 'lightbox-open');
 
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-    LIGHTBOX_PHOTO_EL.src = '';
+    LIGHTBOX_PHOTO_EL.children[0].src = '';
 }
 
 function onPrevPhoto() {
@@ -84,18 +84,18 @@ function onPrevPhoto() {
 
     // Set the src to the next photo
     var photo = photos[currentPhotoIndex];
-    LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
+    LIGHTBOX_PHOTO_EL.children[0].setAttribute('src', getPhotoUrl(photo, 'z'));
 
     // Make the photo invisible and the spinner visible
-    addClass(LIGHTBOX_BG_EL, 'is-loading');
+    addClass(LIGHTBOX_PHOTO_EL, 'is-loading');
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
 
     // On image load, animate the first photo in and hide the spinner
-    onImageLoad(LIGHTBOX_PHOTO_EL, function() {
-        addClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
-        removeClass(LIGHTBOX_BG_EL, 'is-loading');
+    onImageLoad(LIGHTBOX_PHOTO_EL.children[0], function() {
+        addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
+        removeClass(LIGHTBOX_PHOTO_EL, 'is-loading');
     });
 }
 
@@ -104,18 +104,18 @@ function onNextPhoto() {
 
     // Set the src to the next photo
     var photo = photos[currentPhotoIndex];
-    LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
+    LIGHTBOX_PHOTO_EL.children[0].setAttribute('src', getPhotoUrl(photo, 'z'));
 
     // Make the photo invisible and the spinner visible
-    addClass(LIGHTBOX_BG_EL, 'is-loading');
+    addClass(LIGHTBOX_PHOTO_EL, 'is-loading');
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
     removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
 
     // On image load, animate the first photo in and hide the spinner
-    onImageLoad(LIGHTBOX_PHOTO_EL, function() {
-        addClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
-        removeClass(LIGHTBOX_BG_EL, 'is-loading');
+    onImageLoad(LIGHTBOX_PHOTO_EL.children[0], function() {
+        addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
+        removeClass(LIGHTBOX_PHOTO_EL, 'is-loading');
     });
 }
 
@@ -156,7 +156,8 @@ function initAppHandlers() {
 }
 
 window.onload = function() {
-    PHOTOS_CONTAINER = document.getElementById('photos-container');
+    PHOTOS_CONTAINER_EL = document.getElementById('photos-container');
+    LIGHTBOX_CONTAINER_EL = document.getElementById('lightbox-container');
     LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
     LIGHTBOX_BG_EL = document.getElementById('lightbox-background');
 
@@ -165,7 +166,7 @@ window.onload = function() {
         var photosEls = photos.map(createThumbnailEl);
 
         for (var photoEl of photosEls) {
-            PHOTOS_CONTAINER.appendChild(photoEl);
+            PHOTOS_CONTAINER_EL.appendChild(photoEl);
         }
     }, function(errorStatus) {
         alert('there was an error!'); // TODO
