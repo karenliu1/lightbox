@@ -43,22 +43,22 @@ body.lightbox-open {
   opacity: 0.9;
   z-index: 3;
 }
-#lightbox-container #lightbox-photo {
+#lightbox-container .lightbox-photo {
   margin: auto;
   z-index: 4;
 }
-#lightbox-container #lightbox-photo.is-loading {
+#lightbox-container .lightbox-photo.is-loading {
   background-image: url(loader.gif);
   background-repeat: no-repeat;
   background-position: center;
   border: 1px solid #888;
 }
-#lightbox-container #lightbox-photo img {
+#lightbox-container .lightbox-photo img {
   display: block;
   opacity: 0;
   pointer-events: none;
 }
-#lightbox-container #lightbox-photo.is-visible img {
+#lightbox-container .lightbox-photo.is-visible img {
   animation: fadeIn 200ms forwards;
   pointer-events: auto;
 }

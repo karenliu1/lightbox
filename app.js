@@ -60,13 +60,30 @@ function onOpenLightbox(photo, index) {
 
     addClass(document.body, 'lightbox-open');
 
-    LIGHTBOX_PHOTO_EL.children[0].setAttribute('src', getPhotoUrl(photo, 'z'));
-    addClass(LIGHTBOX_PHOTO_EL, 'is-loading');
+    // Create img tag element
+    var photoImgEl = document.createElement('img');
+    photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
 
-    // Animate first photo in, hide the spinner
-    onImageLoad(LIGHTBOX_PHOTO_EL.children[0], function() {
-        addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-        removeClass(LIGHTBOX_PHOTO_EL, 'is-loading');
+    // Create wrapper element
+    var photoEl = document.createElement('div');
+    addClass(photoEl, 'lightbox-photo');
+    addClass(photoEl, 'is-loading');
+    photoEl.appendChild(photoImgEl);
+
+    // Remove old photo element (TODO: animate out, then remove)
+    for (var child of LIGHTBOX_CONTAINER_EL.children) {
+        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
+            LIGHTBOX_CONTAINER_EL.removeChild(child);
+        }
+    }
+
+    // Add wrapper element to lightbox
+    LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
+
+    // Once the photo loads, show it and hide the spinner
+    onImageLoad(photoImgEl, function() {
+        addClass(photoEl, 'is-visible');
+        removeClass(photoEl, 'is-loading');
     });
 }
 
@@ -75,47 +92,73 @@ function onCloseLightbox() {
 
     removeClass(document.body, 'lightbox-open');
 
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-    LIGHTBOX_PHOTO_EL.children[0].src = '';
+    // Remove all photo elements
+    for (var child of LIGHTBOX_CONTAINER_EL.children) {
+        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
+            LIGHTBOX_CONTAINER_EL.removeChild(child);
+        }
+    }
 }
 
 function onPrevPhoto() {
     currentPhotoIndex -= 1; // TODO: boundary checks
-
-    // Set the src to the next photo
     var photo = photos[currentPhotoIndex];
-    LIGHTBOX_PHOTO_EL.children[0].setAttribute('src', getPhotoUrl(photo, 'z'));
 
-    // Make the photo invisible and the spinner visible
-    addClass(LIGHTBOX_PHOTO_EL, 'is-loading');
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
+    // Create img tag element
+    var photoImgEl = document.createElement('img');
+    photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
 
-    // On image load, animate the first photo in and hide the spinner
-    onImageLoad(LIGHTBOX_PHOTO_EL.children[0], function() {
-        addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-        removeClass(LIGHTBOX_PHOTO_EL, 'is-loading');
+    // Create wrapper element
+    var photoEl = document.createElement('div');
+    addClass(photoEl, 'lightbox-photo');
+    addClass(photoEl, 'is-loading');
+    photoEl.appendChild(photoImgEl);
+
+    // Remove old photo element (TODO: animate out, then remove)
+    for (var child of LIGHTBOX_CONTAINER_EL.children) {
+        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
+            LIGHTBOX_CONTAINER_EL.removeChild(child);
+        }
+    }
+
+    // Add wrapper element to lightbox
+    LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
+
+    // Once the photo loads, show it and hide the spinner
+    onImageLoad(photoImgEl, function() {
+        addClass(photoEl, 'is-visible');
+        removeClass(photoEl, 'is-loading');
     });
 }
 
 function onNextPhoto() {
     currentPhotoIndex += 1; // TODO: boundary checks
-
-    // Set the src to the next photo
     var photo = photos[currentPhotoIndex];
-    LIGHTBOX_PHOTO_EL.children[0].setAttribute('src', getPhotoUrl(photo, 'z'));
 
-    // Make the photo invisible and the spinner visible
-    addClass(LIGHTBOX_PHOTO_EL, 'is-loading');
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
-    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
+    // Create img tag element
+    var photoImgEl = document.createElement('img');
+    photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
 
-    // On image load, animate the first photo in and hide the spinner
-    onImageLoad(LIGHTBOX_PHOTO_EL.children[0], function() {
-        addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
-        removeClass(LIGHTBOX_PHOTO_EL, 'is-loading');
+    // Create wrapper element
+    var photoEl = document.createElement('div');
+    addClass(photoEl, 'lightbox-photo');
+    addClass(photoEl, 'is-loading');
+    photoEl.appendChild(photoImgEl);
+
+    // Remove old photo element (TODO: animate out, then remove)
+    for (var child of LIGHTBOX_CONTAINER_EL.children) {
+        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
+            LIGHTBOX_CONTAINER_EL.removeChild(child);
+        }
+    }
+
+    // Add wrapper element to lightbox
+    LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
+
+    // Once the photo loads, show it and hide the spinner
+    onImageLoad(photoImgEl, function() {
+        addClass(photoEl, 'is-visible');
+        removeClass(photoEl, 'is-loading');
     });
 }
 
