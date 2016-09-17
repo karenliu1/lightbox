@@ -46,7 +46,6 @@ body.lightbox-open {
 }
 
 #lightbox-container {
-    display: flex;
     opacity: 0;
     pointer-events: none;
     transition: opacity @TRANSITION_FAST;
@@ -70,7 +69,8 @@ body.lightbox-open {
     }
 
     .lightbox-photo {
-        margin: auto;
+        .positionFill();
+        display: flex;
         z-index: @ZINDEX_LIGHTBOX_PHOTO;
 
         &.is-loading {
@@ -82,6 +82,7 @@ body.lightbox-open {
 
         img {
             display: block; // no space inside of lightbox-photo border
+            margin: auto;
             opacity: 0;
             pointer-events: none;
         }
@@ -89,6 +90,15 @@ body.lightbox-open {
         &.is-visible img {
             animation: fadeIn @TRANSITION_FAST forwards;
             pointer-events: auto;
+        }
+
+        transition: transform @TRANSITION_FAST;
+        &.exit-left {
+            transform: translateX(-100px);
+        }
+
+        &.exit-right {
+            transform: translateX(100px);
         }
     }
 }

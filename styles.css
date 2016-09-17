@@ -19,7 +19,6 @@ body.lightbox-open {
   justify-content: center;
 }
 #lightbox-container {
-  display: flex;
   opacity: 0;
   pointer-events: none;
   transition: opacity 200ms;
@@ -44,8 +43,14 @@ body.lightbox-open {
   z-index: 3;
 }
 #lightbox-container .lightbox-photo {
-  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
   z-index: 4;
+  transition: transform 200ms;
 }
 #lightbox-container .lightbox-photo.is-loading {
   background-image: url(loader.gif);
@@ -55,12 +60,19 @@ body.lightbox-open {
 }
 #lightbox-container .lightbox-photo img {
   display: block;
+  margin: auto;
   opacity: 0;
   pointer-events: none;
 }
 #lightbox-container .lightbox-photo.is-visible img {
   animation: fadeIn 200ms forwards;
   pointer-events: auto;
+}
+#lightbox-container .lightbox-photo.exit-left {
+  transform: translateX(-100px);
+}
+#lightbox-container .lightbox-photo.exit-right {
+  transform: translateX(100px);
 }
 .thumbnail-wrapper {
   cursor: pointer;

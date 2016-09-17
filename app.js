@@ -1,3 +1,4 @@
+var TRANSITION_FAST_MS = 200;
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
@@ -60,31 +61,7 @@ function onOpenLightbox(photo, index) {
 
     addClass(document.body, 'lightbox-open');
 
-    // Create img tag element
-    var photoImgEl = document.createElement('img');
-    photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
-
-    // Create wrapper element
-    var photoEl = document.createElement('div');
-    addClass(photoEl, 'lightbox-photo');
-    addClass(photoEl, 'is-loading');
-    photoEl.appendChild(photoImgEl);
-
-    // Remove old photo element (TODO: animate out, then remove)
-    for (var child of LIGHTBOX_CONTAINER_EL.children) {
-        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
-            LIGHTBOX_CONTAINER_EL.removeChild(child);
-        }
-    }
-
-    // Add wrapper element to lightbox
-    LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
-
-    // Once the photo loads, show it and hide the spinner
-    onImageLoad(photoImgEl, function() {
-        addClass(photoEl, 'is-visible');
-        removeClass(photoEl, 'is-loading');
-    });
+    addPhotoElement(photo);
 }
 
 function onCloseLightbox() {
@@ -100,10 +77,17 @@ function onCloseLightbox() {
     }
 }
 
-function onPrevPhoto() {
-    currentPhotoIndex -= 1; // TODO: boundary checks
-    var photo = photos[currentPhotoIndex];
+function animatePhotoOut(element, animationClass) {
+    addClass(element, animationClass);
 
+    // TODO: clear these timeouts on close
+    setTimeout(function() {
+        LIGHTBOX_CONTAINER_EL.removeChild(element);
+    }, TRANSITION_FAST_MS);
+}
+
+// TODO: transition in from left or right or up
+function addPhotoElement(photo) {
     // Create img tag element
     var photoImgEl = document.createElement('img');
     photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
@@ -113,13 +97,6 @@ function onPrevPhoto() {
     addClass(photoEl, 'lightbox-photo');
     addClass(photoEl, 'is-loading');
     photoEl.appendChild(photoImgEl);
-
-    // Remove old photo element (TODO: animate out, then remove)
-    for (var child of LIGHTBOX_CONTAINER_EL.children) {
-        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
-            LIGHTBOX_CONTAINER_EL.removeChild(child);
-        }
-    }
 
     // Add wrapper element to lightbox
     LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
@@ -131,35 +108,24 @@ function onPrevPhoto() {
     });
 }
 
+function onPrevPhoto() {
+    currentPhotoIndex -= 1; // TODO: boundary checks
+    var photo = photos[currentPhotoIndex];
+
+    // Remove old photo element
+    animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-right');
+
+    addPhotoElement(photo);
+}
+
 function onNextPhoto() {
     currentPhotoIndex += 1; // TODO: boundary checks
     var photo = photos[currentPhotoIndex];
 
-    // Create img tag element
-    var photoImgEl = document.createElement('img');
-    photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
+    // Remove old photo element
+    animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-left');
 
-    // Create wrapper element
-    var photoEl = document.createElement('div');
-    addClass(photoEl, 'lightbox-photo');
-    addClass(photoEl, 'is-loading');
-    photoEl.appendChild(photoImgEl);
-
-    // Remove old photo element (TODO: animate out, then remove)
-    for (var child of LIGHTBOX_CONTAINER_EL.children) {
-        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
-            LIGHTBOX_CONTAINER_EL.removeChild(child);
-        }
-    }
-
-    // Add wrapper element to lightbox
-    LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
-
-    // Once the photo loads, show it and hide the spinner
-    onImageLoad(photoImgEl, function() {
-        addClass(photoEl, 'is-visible');
-        removeClass(photoEl, 'is-loading');
-    });
+    addPhotoElement(photo);
 }
 
 function onKeyDown(e) {
