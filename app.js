@@ -6,6 +6,18 @@ var PHOTOS_CONTAINER, LIGHTBOX_BG_EL, LIGHTBOX_PHOTO_EL;
 var photos = [];
 var currentPhotoIndex = null;
 
+function addClass(element, className) {
+    element.className += ' ' + className;
+}
+
+function removeClass(element, className) {
+    element.className = element.className
+        .split(' ')
+        .filter(function(cn) { return cn !== className; })
+        .join(' ')
+        .trim();
+}
+
 function getPhotoUrl(photo, options) {
     return 'https://farm' + photo.farm + '.staticflickr.com/' +
         photo.server + '/' + photo.id + '_' + photo.secret + '_' + options + '.jpg';
@@ -46,24 +58,24 @@ function onImageLoad(imageEl, callback) {
 function onOpenLightbox(photo, index) {
     currentPhotoIndex = index;
 
-    document.body.className = 'lightbox-open';
+    addClass(document.body, 'lightbox-open');
 
     LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
-    LIGHTBOX_BG_EL.className = 'is-loading';
+    addClass(LIGHTBOX_BG_EL, 'is-loading');
 
     // Animate first photo in, hide the spinner
     onImageLoad(LIGHTBOX_PHOTO_EL, function() {
-        LIGHTBOX_PHOTO_EL.className += ' is-visible';
-        LIGHTBOX_BG_EL.className = '';
+        addClass(LIGHTBOX_PHOTO_EL, 'is-visible');
+        removeClass(LIGHTBOX_BG_EL, 'is-loading');
     });
 }
 
 function onCloseLightbox() {
     currentPhotoIndex = null;
 
-    document.body.className = '';
+    removeClass(document.body, 'lightbox-open');
 
-    LIGHTBOX_PHOTO_EL.className = '';
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
     LIGHTBOX_PHOTO_EL.src = '';
 }
 
@@ -75,13 +87,15 @@ function onPrevPhoto() {
     LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
 
     // Make the photo invisible and the spinner visible
-    LIGHTBOX_BG_EL.className = 'is-loading';
-    LIGHTBOX_PHOTO_EL.className = '';
+    addClass(LIGHTBOX_BG_EL, 'is-loading');
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
 
     // On image load, animate the first photo in and hide the spinner
     onImageLoad(LIGHTBOX_PHOTO_EL, function() {
-        LIGHTBOX_PHOTO_EL.className += ' is-visible-from-left';
-        LIGHTBOX_BG_EL.className = '';
+        addClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
+        removeClass(LIGHTBOX_BG_EL, 'is-loading');
     });
 }
 
@@ -93,13 +107,15 @@ function onNextPhoto() {
     LIGHTBOX_PHOTO_EL.setAttribute('src', getPhotoUrl(photo, 'z'));
 
     // Make the photo invisible and the spinner visible
-    LIGHTBOX_BG_EL.className = 'is-loading';
-    LIGHTBOX_PHOTO_EL.className = '';
+    addClass(LIGHTBOX_BG_EL, 'is-loading');
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible');
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-left');
+    removeClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
 
     // On image load, animate the first photo in and hide the spinner
     onImageLoad(LIGHTBOX_PHOTO_EL, function() {
-        LIGHTBOX_PHOTO_EL.className += ' is-visible-from-right';
-        LIGHTBOX_BG_EL.className = '';
+        addClass(LIGHTBOX_PHOTO_EL, 'is-visible-from-right');
+        removeClass(LIGHTBOX_BG_EL, 'is-loading');
     });
 }
 
@@ -119,16 +135,16 @@ function onKeyDown(e) {
 function createThumbnailEl(photo, index) {
     var photoEl = document.createElement('img');
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
-    photoEl.className = 'thumbnail';
+    addClass(photoEl, 'thumbnail');
 
     var wrapperEl = document.createElement('div');
-    wrapperEl.className = 'thumbnail-wrapper is-loading';
+    addClass(wrapperEl, 'thumbnail-wrapper is-loading');
     wrapperEl.appendChild(photoEl);
     wrapperEl.onclick = function() { onOpenLightbox(photo, index); }
 
     onImageLoad(photoEl, function() {
-        photoEl.className += ' is-visible';
-        wrapperEl.className = 'thumbnail-wrapper';
+        addClass(photoEl, 'is-visible');
+        removeClass(wrapperEl, 'is-loading');
     });
 
     return wrapperEl;
