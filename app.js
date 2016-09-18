@@ -124,7 +124,8 @@ function addPhotoElement(photo, transitionClassName) {
 }
 
 function onPrevPhoto() {
-    currentPhotoIndex -= 1; // TODO: boundary checks
+    if (currentPhotoIndex === 0) { return; }
+    currentPhotoIndex -= 1;
     var photo = photos[currentPhotoIndex];
 
     // Remove old photo element
@@ -134,7 +135,8 @@ function onPrevPhoto() {
 }
 
 function onNextPhoto() {
-    currentPhotoIndex += 1; // TODO: boundary checks
+    if (currentPhotoIndex + 1 === photos.length) { return; }
+    currentPhotoIndex += 1;
     var photo = photos[currentPhotoIndex];
 
     // Remove old photo element
