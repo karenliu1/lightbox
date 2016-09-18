@@ -2,7 +2,7 @@ var TRANSITION_PHOTO_MS = 400;
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
-var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL;
+var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL, LIGHTBOX_TITLE_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
@@ -13,6 +13,14 @@ function findAncestor(element, className) {
         element = element.parentElement;
     }
     return element;
+}
+
+function applyToChildrenWithClass(element, className, callback) {
+    for (var child of element.children) {
+        if (child.className && child.className.indexOf(className) !== -1) {
+            callback(child);
+        }
+    }
 }
 
 function addClass(element, className) {
@@ -78,15 +86,18 @@ function onCloseLightbox() {
     removeClass(document.body, 'lightbox-open');
 
     // Remove all photo elements
-    for (var child of LIGHTBOX_CONTAINER_EL.children) {
-        if (child.className && child.className.indexOf('lightbox-photo') !== -1) {
-            LIGHTBOX_CONTAINER_EL.removeChild(child);
-        }
-    }
+    applyToChildrenWithClass(LIGHTBOX_CONTAINER_EL, 'lightbox-photo', function(child) {
+        LIGHTBOX_CONTAINER_EL.removeChild(child);
+    });
 }
 
 function animatePhotoOut(element, animationClass) {
     addClass(element, animationClass);
+
+    // Hide the title while photo is animating out
+    applyToChildrenWithClass(element, 'lightbox-photo-title', function(child) {
+        removeClass(child, 'is-visible');
+    });
 
     // TODO: clear these timeouts on close
     setTimeout(function() {
@@ -106,15 +117,27 @@ function addPhotoElement(photo, transitionClassName) {
     addClass(photoBorderEl, 'lightbox-photo-border');
     photoBorderEl.appendChild(photoImgEl);
 
+    // Set the current title to this photo
+    var photoTitleEl = document.createElement('div');
+    addClass(photoTitleEl, 'lightbox-photo-title');
+    photoTitleEl.innerText = photo.title;
+
     // Create wrapper element (positioned absolutely so they stack while animating)
     var photoEl = document.createElement('div');
     addClass(photoEl, 'lightbox-photo');
     addClass(photoEl, 'is-loading');
     addClass(photoEl, transitionClassName);
     photoEl.appendChild(photoBorderEl);
+    photoEl.appendChild(photoTitleEl);
 
     // Add wrapper element to lightbox
     LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
+
+    // Once the photo animates into place, show the title
+    // TODO: clear this timeout
+    setTimeout(function() {
+        addClass(photoTitleEl, 'is-visible');
+    }, TRANSITION_PHOTO_MS);
 
     // Once the photo loads, show it and hide the spinner
     onImageLoad(photoImgEl, function() {
@@ -194,6 +217,7 @@ window.onload = function() {
     PHOTOS_CONTAINER_EL = document.getElementById('photos-container');
     LIGHTBOX_CONTAINER_EL = document.getElementById('lightbox-container');
     LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
+    LIGHTBOX_TITLE_EL = document.getElementById('lightbox-title');
 
     requestPhotoset('72157639990929493', function(response) {
         photos = response.photoset.photo;

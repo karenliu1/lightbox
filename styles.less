@@ -1,4 +1,14 @@
 @BORDER_RADIUS: 5px;
+
+@COLOR_BG_LIGHTBOX: #000;
+@COLOR_BORDER_LIGHTBOX: #888;
+@COLOR_BORDER_THUMBNAIL: #ddd;
+@COLOR_TEXT_LIGHT: #eee;
+@COLOR_TEXT_DARK: #888;
+
+@FONT_SIZE_MD: 14px;
+@FONT_SIZE_LG: 20px;
+
 @GUTTER_SM: 4px;
 @GUTTER_MD: 8px;
 @GUTTER_LG: 32px;
@@ -64,7 +74,7 @@ body.lightbox-open {
 
     &::before {
         .positionFill();
-        background-color: #000;
+        background-color: @COLOR_BG_LIGHTBOX;
         content: "";
         opacity: 0.9;
         z-index: @ZINDEX_LIGHTBOX_BG;
@@ -73,15 +83,34 @@ body.lightbox-open {
     .lightbox-photo {
         .positionFill();
 
+        // Align photo and the caption/title beneath it
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
         z-index: @ZINDEX_LIGHTBOX_PHOTO;
 
-        .lightbox-photo-border {
-            margin: auto;
+        .lightbox-photo-title {
+            font-size: @FONT_SIZE_MD;
+            color: @COLOR_TEXT_LIGHT;
+            margin: @GUTTER_MD 20%;
+
+            opacity: 0;
+            transition: opacity @TRANSITION_FAST;
+            &.is-visible {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .lightbox-photo-title {
+                margin: @GUTTER_MD;
+            }
         }
 
         &.is-loading .lightbox-photo-border {
-            border: 1px solid #888;
+            border: 1px solid @COLOR_BORDER_LIGHTBOX;
             background-image: url(loader.gif);
             background-repeat: no-repeat;
             background-position: center;
@@ -132,7 +161,7 @@ body.lightbox-open {
     width: @THUMBNAIL_SIZE;
     height: @THUMBNAIL_SIZE;
 
-    border: 1px solid #ddd;
+    border: 1px solid @COLOR_BORDER_THUMBNAIL;
     padding: 5px 5px 25px 5px;
     transform: rotate(5deg);
     transition: transform @TRANSITION_FAST; // For un-rotating on hover
@@ -156,9 +185,9 @@ body.lightbox-open {
         left: 0;
         right: 0;
 
-        color: #888;
+        color: @COLOR_TEXT_DARK;
         content: "View";
-        font-size: 14px;
+        font-size: @FONT_SIZE_MD;
         z-index: @ZINDEX_THUMBNAIL_OVERLAY;
 
         opacity: 0;
