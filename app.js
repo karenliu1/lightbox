@@ -146,7 +146,8 @@ function onNextPhoto() {
 }
 
 function onKeyDown(e) {
-    // TODO: do nothing if lightbox is closed or no photos have loaded
+    // Do nothing if lightbox is closed
+    if (currentPhotoIndex === null) { return; }
 
     switch (e.keyCode) {
         case 27: // esc
