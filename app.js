@@ -7,6 +7,9 @@ var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL, LIGHTBOX_TITL
 var photos = [];
 var currentPhotoIndex = null;
 
+// Animation timeouts from lightbox actions. Clear all of these when closing the lightbox.
+var lightboxTimeouts = [];
+
 // Modified from http://stackoverflow.com/a/22119674/4794892
 function findAncestor(element, className) {
     while (element && !element.classList.contains(className)) {
@@ -16,11 +19,21 @@ function findAncestor(element, className) {
 }
 
 function applyToChildrenWithClass(element, className, callback) {
-    for (var child of element.children) {
+    var children = element.children;
+    var matchedChildren = [];
+    for (var i = 0; i < children.length; i++) {
+        var child = children[i];
         if (child.className && child.className.indexOf(className) !== -1) {
-            callback(child);
+            matchedChildren.push(child);
         }
     }
+
+    // Call callbacks at the end, in case callback modifies element.children
+    matchedChildren.forEach(callback);
+}
+
+function registerLightboxTimeout(callback, timeout) {
+    lightboxTimeouts.push(setTimeout(callback, timeout));
 }
 
 function addClass(element, className) {
@@ -85,6 +98,10 @@ function onCloseLightbox() {
 
     removeClass(document.body, 'lightbox-open');
 
+    // Clear all timeouts
+    lightboxTimeouts.forEach(function(timeout) { clearTimeout(timeout); });
+    lightboxTimeouts = [];
+
     // Remove all photo elements
     applyToChildrenWithClass(LIGHTBOX_CONTAINER_EL, 'lightbox-photo', function(child) {
         LIGHTBOX_CONTAINER_EL.removeChild(child);
@@ -99,8 +116,7 @@ function animatePhotoOut(element, animationClass) {
         removeClass(child, 'is-visible');
     });
 
-    // TODO: clear these timeouts on close
-    setTimeout(function() {
+    registerLightboxTimeout(function() {
         LIGHTBOX_CONTAINER_EL.removeChild(element);
     }, TRANSITION_PHOTO_MS);
 }
@@ -134,8 +150,7 @@ function addPhotoElement(photo, transitionClassName) {
     LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
 
     // Once the photo animates into place, show the title
-    // TODO: clear this timeout
-    setTimeout(function() {
+    registerLightboxTimeout(function() {
         addClass(photoTitleEl, 'is-visible');
     }, TRANSITION_PHOTO_MS);
 
