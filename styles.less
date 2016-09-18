@@ -71,24 +71,32 @@ body.lightbox-open {
 
     .lightbox-photo {
         .positionFill();
+
         display: flex;
         z-index: @ZINDEX_LIGHTBOX_PHOTO;
 
-        &.is-loading {
+        .lightbox-photo-border {
+            margin: auto;
+        }
+
+        &.is-loading .lightbox-photo-border {
+            border: 1px solid #888;
             background-image: url(loader.gif);
             background-repeat: no-repeat;
             background-position: center;
-            border: 1px solid #888;
+
+            // Prevents zero-sized border box when we don't yet have the image dimensions
+            min-width: 150px;
+            min-height: 150px;
         }
 
-        img {
+        .lightbox-photo-img {
             display: block; // no space inside of lightbox-photo border
-            margin: auto;
             opacity: 0;
             pointer-events: none;
         }
 
-        &.is-visible img {
+        &.is-visible .lightbox-photo-img {
             animation: fadeIn @TRANSITION_FAST forwards;
             pointer-events: auto;
         }

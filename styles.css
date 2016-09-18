@@ -53,19 +53,23 @@ body.lightbox-open {
   z-index: 4;
   transition: transform 200ms, opacity 200ms;
 }
-#lightbox-container .lightbox-photo.is-loading {
+#lightbox-container .lightbox-photo .lightbox-photo-border {
+  margin: auto;
+}
+#lightbox-container .lightbox-photo.is-loading .lightbox-photo-border {
+  border: 1px solid #888;
   background-image: url(loader.gif);
   background-repeat: no-repeat;
   background-position: center;
-  border: 1px solid #888;
+  min-width: 150px;
+  min-height: 150px;
 }
-#lightbox-container .lightbox-photo img {
+#lightbox-container .lightbox-photo .lightbox-photo-img {
   display: block;
-  margin: auto;
   opacity: 0;
   pointer-events: none;
 }
-#lightbox-container .lightbox-photo.is-visible img {
+#lightbox-container .lightbox-photo.is-visible .lightbox-photo-img {
   animation: fadeIn 200ms forwards;
   pointer-events: auto;
 }

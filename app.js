@@ -100,12 +100,18 @@ function addPhotoElement(photo, transitionClassName) {
     addClass(photoImgEl, 'lightbox-photo-img');
     photoImgEl.setAttribute('src', getPhotoUrl(photo, 'z'));
 
-    // Create wrapper element
+    // Create border element (matches image size, shows a placeholder box while
+    // img is loading)
+    var photoBorderEl = document.createElement('div');
+    addClass(photoBorderEl, 'lightbox-photo-border');
+    photoBorderEl.appendChild(photoImgEl);
+
+    // Create wrapper element (positioned absolutely so they stack while animating)
     var photoEl = document.createElement('div');
     addClass(photoEl, 'lightbox-photo');
     addClass(photoEl, 'is-loading');
     addClass(photoEl, transitionClassName);
-    photoEl.appendChild(photoImgEl);
+    photoEl.appendChild(photoBorderEl);
 
     // Add wrapper element to lightbox
     LIGHTBOX_CONTAINER_EL.appendChild(photoEl);
