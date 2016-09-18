@@ -6,6 +6,7 @@
 @THUMBNAIL_SIZE: 150px;
 
 @TRANSITION: 1s;
+@TRANSITION_PHOTO: 400ms;
 @TRANSITION_FAST: 200ms;
 
 @ZINDEX_THUMBNAIL_OVERLAY: 2;
@@ -101,22 +102,24 @@ body.lightbox-open {
             pointer-events: auto;
         }
 
-        &.enter-left {
-            animation: enterLeft @TRANSITION_FAST;
-        }
-        &.enter-right {
-            animation: enterRight @TRANSITION_FAST;
+        &.enter {
+            animation: enter @TRANSITION_PHOTO;
         }
 
-        transition: transform @TRANSITION_FAST, opacity @TRANSITION_FAST;
+        &.enter-left {
+            animation: enterLeft @TRANSITION_PHOTO;
+        }
+
+        &.enter-right {
+            animation: enterRight @TRANSITION_PHOTO;
+        }
+
         &.exit-left {
-            transform: translateX(-200px) scale(0.8);
-            opacity: 0;
+            animation: exitLeft @TRANSITION_PHOTO forwards;
         }
 
         &.exit-right {
-            transform: translateX(200px) scale(0.8);
-            opacity: 0;
+            animation: exitRight @TRANSITION_PHOTO forwards;
         }
     }
 }
@@ -171,7 +174,7 @@ body.lightbox-open {
     }
 }
 
-@keyframes fadeInDown {
+@keyframes enter {
     from {
         opacity: 0;
         transform: translateY(-100px);
@@ -201,6 +204,28 @@ body.lightbox-open {
     to {
         opacity: 1;
         transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes exitLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-200px) scale(0.8);
+    }
+}
+
+@keyframes exitRight {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(200px) scale(0.8);
     }
 }
 

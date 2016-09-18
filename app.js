@@ -1,4 +1,4 @@
-var TRANSITION_FAST_MS = 200;
+var TRANSITION_PHOTO_MS = 400;
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 
@@ -91,7 +91,7 @@ function animatePhotoOut(element, animationClass) {
     // TODO: clear these timeouts on close
     setTimeout(function() {
         LIGHTBOX_CONTAINER_EL.removeChild(element);
-    }, TRANSITION_FAST_MS);
+    }, TRANSITION_PHOTO_MS);
 }
 
 function addPhotoElement(photo, transitionClassName) {

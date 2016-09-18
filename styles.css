@@ -51,7 +51,6 @@ body.lightbox-open {
   left: 0;
   display: flex;
   z-index: 4;
-  transition: transform 200ms, opacity 200ms;
 }
 #lightbox-container .lightbox-photo .lightbox-photo-border {
   margin: auto;
@@ -73,19 +72,20 @@ body.lightbox-open {
   animation: fadeIn 200ms forwards;
   pointer-events: auto;
 }
+#lightbox-container .lightbox-photo.enter {
+  animation: enter 400ms;
+}
 #lightbox-container .lightbox-photo.enter-left {
-  animation: enterLeft 200ms;
+  animation: enterLeft 400ms;
 }
 #lightbox-container .lightbox-photo.enter-right {
-  animation: enterRight 200ms;
+  animation: enterRight 400ms;
 }
 #lightbox-container .lightbox-photo.exit-left {
-  transform: translateX(-200px) scale(0.8);
-  opacity: 0;
+  animation: exitLeft 400ms forwards;
 }
 #lightbox-container .lightbox-photo.exit-right {
-  transform: translateX(200px) scale(0.8);
-  opacity: 0;
+  animation: exitRight 400ms forwards;
 }
 .thumbnail-wrapper {
   cursor: pointer;
@@ -128,7 +128,7 @@ body.lightbox-open {
 .thumbnail-wrapper:hover::before {
   opacity: 1;
 }
-@keyframes fadeInDown {
+@keyframes enter {
   from {
     opacity: 0;
     transform: translateY(-100px);
@@ -156,6 +156,26 @@ body.lightbox-open {
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
+  }
+}
+@keyframes exitLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-200px) scale(0.8);
+  }
+}
+@keyframes exitRight {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(200px) scale(0.8);
   }
 }
 @keyframes fadeIn {
