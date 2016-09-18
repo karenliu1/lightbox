@@ -93,13 +93,22 @@ body.lightbox-open {
             pointer-events: auto;
         }
 
-        transition: transform @TRANSITION_FAST;
+        &.enter-left {
+            animation: enterLeft @TRANSITION_FAST;
+        }
+        &.enter-right {
+            animation: enterRight @TRANSITION_FAST;
+        }
+
+        transition: transform @TRANSITION_FAST, opacity @TRANSITION_FAST;
         &.exit-left {
-            transform: translateX(-100px);
+            transform: translateX(-200px) scale(0.8);
+            opacity: 0;
         }
 
         &.exit-right {
-            transform: translateX(100px);
+            transform: translateX(200px) scale(0.8);
+            opacity: 0;
         }
     }
 }
@@ -165,25 +174,25 @@ body.lightbox-open {
     }
 }
 
-@keyframes fadeInLeft {
+@keyframes enterLeft {
     from {
         opacity: 0;
-        transform: translateX(100px);
+        transform: translateX(-200px) scale(0.8);
     }
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
     }
 }
 
-@keyframes fadeInRight {
+@keyframes enterRight {
     from {
         opacity: 0;
-        transform: translateX(-100px);
+        transform: translateX(200px) scale(0.8);
     }
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
     }
 }
 

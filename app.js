@@ -69,7 +69,7 @@ function onOpenLightbox(photo, index) {
 
     addClass(document.body, 'lightbox-open');
 
-    addPhotoElement(photo);
+    addPhotoElement(photo, 'enter');
 }
 
 function onCloseLightbox() {
@@ -94,8 +94,7 @@ function animatePhotoOut(element, animationClass) {
     }, TRANSITION_FAST_MS);
 }
 
-// TODO: transition in from left or right or up
-function addPhotoElement(photo) {
+function addPhotoElement(photo, transitionClassName) {
     // Create img tag element
     var photoImgEl = document.createElement('img');
     addClass(photoImgEl, 'lightbox-photo-img');
@@ -105,6 +104,7 @@ function addPhotoElement(photo) {
     var photoEl = document.createElement('div');
     addClass(photoEl, 'lightbox-photo');
     addClass(photoEl, 'is-loading');
+    addClass(photoEl, transitionClassName);
     photoEl.appendChild(photoImgEl);
 
     // Add wrapper element to lightbox
@@ -124,7 +124,7 @@ function onPrevPhoto() {
     // Remove old photo element
     animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-right');
 
-    addPhotoElement(photo);
+    addPhotoElement(photo, 'enter-left');
 }
 
 function onNextPhoto() {
@@ -134,7 +134,7 @@ function onNextPhoto() {
     // Remove old photo element
     animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-left');
 
-    addPhotoElement(photo);
+    addPhotoElement(photo, 'enter-right');
 }
 
 function onKeyDown(e) {
