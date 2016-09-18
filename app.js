@@ -180,8 +180,10 @@ function createThumbnailEl(photo, index) {
 
 function initAppHandlers() {
     LIGHTBOX_CONTAINER_EL.onclick = function(event) {
-        // If not clicking on the photo itself, close the lightbox
-        if (findAncestor(event.target, 'lightbox-photo-img') === null) {
+        // If clicking on the photo itself, go to next photo
+        if (findAncestor(event.target, 'lightbox-photo-img') !== null) {
+            onNextPhoto();
+        } else {
             onCloseLightbox();
         }
     }
