@@ -62,13 +62,12 @@ function onCloseLightbox() {
     removeClass(document.body, 'lightbox-open');
 
     // Clear all timeouts
-    lightboxTimeouts.forEach(function(timeout) { clearTimeout(timeout); });
+    lightboxTimeouts.forEach(clearTimeout);
     lightboxTimeouts = [];
 
     // Remove all photo elements
-    applyToChildrenWithClass(LIGHTBOX_CONTAINER_EL, 'lightbox-photo', function(child) {
-        LIGHTBOX_CONTAINER_EL.removeChild(child);
-    });
+    applyToChildrenWithClass(LIGHTBOX_CONTAINER_EL, 'lightbox-photo',
+        LIGHTBOX_CONTAINER_EL.removeChild.bind(LIGHTBOX_CONTAINER_EL));
 }
 
 function animatePhotoOut(element, animationClass) {
@@ -79,6 +78,7 @@ function animatePhotoOut(element, animationClass) {
         removeClass(child, 'is-visible');
     });
 
+    // Once animated out, remove from DOM
     registerLightboxTimeout(function() {
         LIGHTBOX_CONTAINER_EL.removeChild(element);
     }, TRANSITION_PHOTO_MS);
@@ -96,7 +96,7 @@ function addPhotoElement(photo, transitionClassName) {
     addClass(photoBorderEl, 'lightbox-photo-border');
     photoBorderEl.appendChild(photoImgEl);
 
-    // Set the current title to this photo
+    // Create title/caption element
     var photoTitleEl = document.createElement('div');
     addClass(photoTitleEl, 'lightbox-photo-title');
     photoTitleEl.textContent = photo.title;
@@ -119,7 +119,6 @@ function addPhotoElement(photo, transitionClassName) {
 
     // Once the photo loads, show it and hide the spinner
     onImageLoad(photoImgEl, function() {
-        addClass(photoEl, 'is-visible');
         removeClass(photoEl, 'is-loading');
     });
 }
@@ -178,7 +177,6 @@ function createThumbnailEl(photo, index) {
     wrapperEl.appendChild(photoEl);
 
     onImageLoad(photoEl, function() {
-        addClass(photoEl, 'is-visible');
         removeClass(wrapperEl, 'is-loading');
     });
 

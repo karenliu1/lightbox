@@ -1,4 +1,4 @@
-// Gets the value assigned to the key in the URL's search string (e.g. ?photoset_id=1234)
+// Gets the value assigned to the key in the URL's search string (e.g. ?photoset=1234)
 function getUrlSearchValue(key) {
     var queries = window.location.search
         .slice(1) // Remove leading `?`

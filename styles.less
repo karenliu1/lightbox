@@ -175,7 +175,7 @@ body.lightbox-open {
             max-height: 100vh;
         }
 
-        &.is-visible .lightbox-photo-img {
+        &:not(.is-loading) .lightbox-photo-img {
             animation: fadeIn @TRANSITION_FAST forwards;
             pointer-events: auto;
         }
@@ -223,9 +223,10 @@ body.lightbox-open {
 
     .thumbnail {
         opacity: 0;
-        &.is-visible {
-            animation: fadeIn @TRANSITION forwards;
-        }
+    }
+
+    &:not(.is-loading) .thumbnail {
+        animation: fadeIn @TRANSITION forwards;
     }
 
     &::before {
