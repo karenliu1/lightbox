@@ -1,6 +1,7 @@
 var TRANSITION_PHOTO_MS = 400;
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
+var DEFAULT_PHOTOSET_ID = '72157639990929493';
 
 var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL, LIGHTBOX_TITLE_EL;
 
@@ -9,6 +10,20 @@ var currentPhotoIndex = null;
 
 // Animation timeouts from lightbox actions. Clear all of these when closing the lightbox.
 var lightboxTimeouts = [];
+
+// Gets the value assigned to the key in the URL's search string (e.g. ?photoset_id=1234)
+function getUrlSearchValue(key) {
+    var queries = window.location.search
+        .slice(1) // Remove leading `?`
+        .split('&'); // Split into array of key-values
+    for (var query of queries) {
+        var pair = query.split('=');
+        if (pair.length === 2 && pair[0] === key) {
+            return pair[1];
+        }
+    }
+    return null;
+}
 
 // Modified from http://stackoverflow.com/a/22119674/4794892
 function findAncestor(element, className) {
@@ -234,7 +249,9 @@ window.onload = function() {
     LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
     LIGHTBOX_TITLE_EL = document.getElementById('lightbox-title');
 
-    requestPhotoset('72157639990929493', function(response) {
+    var photoSetId = getUrlSearchValue('photoset') || DEFAULT_PHOTOSET_ID;
+
+    requestPhotoset(photoSetId, function(response) {
         photos = response.photoset.photo;
         var photosEls = photos.map(createThumbnailEl);
 
