@@ -245,9 +245,9 @@ window.onload = function() {
 
         photos = response.photoset.photo;
         var photosEls = photos.map(createThumbnailEl);
-        for (var photoEl of photosEls) {
+        photosEls.forEach(function(photoEl) {
             PHOTOS_CONTAINER_EL.appendChild(photoEl);
-        }
+        });
     }, function(errorStatus) {
         showMessage('There was a problem loading the photoset.');
     });

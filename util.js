@@ -3,8 +3,9 @@ function getUrlSearchValue(key) {
     var queries = window.location.search
         .slice(1) // Remove leading `?`
         .split('&'); // Split into array of key-values
-    for (var query of queries) {
-        var pair = query.split('=');
+
+    for (var i = 0; i < queries.length; i++) {
+        var pair = queries[i].split('=');
         if (pair.length === 2 && pair[0] === key) {
             return pair[1];
         }
