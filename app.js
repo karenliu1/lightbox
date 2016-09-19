@@ -50,19 +50,15 @@ function requestPhotoset(photosetID, resolve, reject) {
     };
 }
 
-function onOpenLightbox(photo, index) {
+function onOpenLightbox(index) {
     currentPhotoIndex = index;
-
     addClass(document.body, 'lightbox-open');
-
-    addPhotoElement(photo, 'enter');
-
+    addPhotoElement(photos[index], 'enter');
     showControls();
 }
 
 function onCloseLightbox() {
     currentPhotoIndex = null;
-
     removeClass(document.body, 'lightbox-open');
 
     // Clear all timeouts
@@ -140,26 +136,20 @@ function showControls() {
 function onPrevPhoto() {
     if (currentPhotoIndex === 0) { return; }
     currentPhotoIndex -= 1;
+
     var photo = photos[currentPhotoIndex];
-
-    // Remove old photo element
-    animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-right');
-
+    animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-right'); // Remove old photo
     addPhotoElement(photo, 'enter-left');
-
     showControls();
 }
 
 function onNextPhoto() {
     if (currentPhotoIndex + 1 === photos.length) { return; }
     currentPhotoIndex += 1;
+
     var photo = photos[currentPhotoIndex];
-
-    // Remove old photo element
-    animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-left');
-
+    animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-left'); // Remove old photo
     addPhotoElement(photo, 'enter-right');
-
     showControls();
 }
 
@@ -184,9 +174,8 @@ function createThumbnailEl(photo, index) {
 
     var wrapperEl = document.createElement('div');
     addClass(wrapperEl, 'thumbnail-wrapper is-loading');
+    wrapperEl.setAttribute('data-photo-index', index);
     wrapperEl.appendChild(photoEl);
-    wrapperEl.onclick = function() { onOpenLightbox(photo, index); }
-    // TODO: reduce number of click handlers?
 
     onImageLoad(photoEl, function() {
         addClass(photoEl, 'is-visible');
@@ -212,6 +201,14 @@ function initAppHandlers() {
     LIGHTBOX_RIGHT_ARROW_EL.onclick = function(event) {
         event.stopPropagation();
         onNextPhoto();
+    }
+    PHOTOS_CONTAINER_EL.onclick = function(event) {
+        // If clicking on a photo element, open that photo
+        var thumbnailEl;
+        if (thumbnailEl = findAncestor(event.target, 'thumbnail-wrapper')) {
+            var index = parseInt(thumbnailEl.getAttribute('data-photo-index'));
+            onOpenLightbox(index);
+        }
     }
     document.addEventListener('keydown', onKeyDown, false);
 }
