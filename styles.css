@@ -11,6 +11,13 @@ body {
 body.lightbox-open {
   overflow: hidden;
 }
+#message {
+  margin: 32px 0;
+  display: none;
+}
+#message.is-visible {
+  display: block;
+}
 #photos-container {
   margin: 32px auto;
   text-align: center;

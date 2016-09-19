@@ -47,6 +47,15 @@ body.lightbox-open {
     overflow: hidden;
 }
 
+#message {
+    margin: @GUTTER_LG 0;
+
+    display: none;
+    &.is-visible {
+        display: block;
+    }
+}
+
 #photos-container {
     margin: @GUTTER_LG auto;
     text-align: center;

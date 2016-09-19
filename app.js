@@ -3,7 +3,8 @@ var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 var DEFAULT_PHOTOSET_ID = '72157639990929493';
 
-var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL, LIGHTBOX_TITLE_EL;
+var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL,
+    LIGHTBOX_TITLE_EL, MESSAGE_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
@@ -23,6 +24,15 @@ function getUrlSearchValue(key) {
         }
     }
     return null;
+}
+
+function showMessage(message) {
+    MESSAGE_EL.innerText = message;
+    addClass(MESSAGE_EL, 'is-visible');
+}
+
+function hideMessage() {
+    removeClass(MESSAGE_EL, 'is-visible');
 }
 
 // Modified from http://stackoverflow.com/a/22119674/4794892
@@ -248,10 +258,22 @@ window.onload = function() {
     LIGHTBOX_CONTAINER_EL = document.getElementById('lightbox-container');
     LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
     LIGHTBOX_TITLE_EL = document.getElementById('lightbox-title');
+    MESSAGE_EL = document.getElementById('message');
 
     var photoSetId = getUrlSearchValue('photoset') || DEFAULT_PHOTOSET_ID;
 
     requestPhotoset(photoSetId, function(response) {
+        if (response.stat === 'fail') {
+            if (response.code === 1) {
+                showMessage('The photoset was not found.');
+            } else {
+                showMessage('There was a problem loading the photoset.');
+            }
+            return;
+        }
+
+        hideMessage(); // It was successful; hide any error messages
+
         photos = response.photoset.photo;
         var photosEls = photos.map(createThumbnailEl);
 
@@ -259,7 +281,7 @@ window.onload = function() {
             PHOTOS_CONTAINER_EL.appendChild(photoEl);
         }
     }, function(errorStatus) {
-        alert('there was an error!'); // TODO
+        showMessage('There was a problem loading the photoset.');
     });
 
     initAppHandlers();
