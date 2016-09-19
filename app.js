@@ -4,7 +4,7 @@ var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 var DEFAULT_PHOTOSET_ID = '72157639990929493';
 
 var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL,
-    LIGHTBOX_TITLE_EL, MESSAGE_EL;
+    LIGHTBOX_TITLE_EL, LIGHTBOX_LEFT_ARROW_EL, LIGHTBOX_RIGHT_ARROW_EL, MESSAGE_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
@@ -250,6 +250,14 @@ function initAppHandlers() {
             onCloseLightbox();
         }
     }
+    LIGHTBOX_LEFT_ARROW_EL.onclick = function(event) {
+        event.stopPropagation();
+        onPrevPhoto();
+    }
+    LIGHTBOX_RIGHT_ARROW_EL.onclick = function(event) {
+        event.stopPropagation();
+        onNextPhoto();
+    }
     document.addEventListener('keydown', onKeyDown, false);
 }
 
@@ -258,6 +266,8 @@ window.onload = function() {
     LIGHTBOX_CONTAINER_EL = document.getElementById('lightbox-container');
     LIGHTBOX_PHOTO_EL = document.getElementById('lightbox-photo');
     LIGHTBOX_TITLE_EL = document.getElementById('lightbox-title');
+    LIGHTBOX_LEFT_ARROW_EL = document.getElementById('lightbox-left-arrow');
+    LIGHTBOX_RIGHT_ARROW_EL = document.getElementById('lightbox-right-arrow');
     MESSAGE_EL = document.getElementById('message');
 
     var photoSetId = getUrlSearchValue('photoset') || DEFAULT_PHOTOSET_ID;

@@ -22,6 +22,7 @@
 @ZINDEX_THUMBNAIL_OVERLAY: 2;
 @ZINDEX_LIGHTBOX_BG: 3;
 @ZINDEX_LIGHTBOX_PHOTO: 4;
+@ZINDEX_LIGHTBOX_ARROW: 5;
 
 .positionFill() {
     position: absolute;
@@ -87,6 +88,32 @@ body.lightbox-open {
         content: "";
         opacity: 0.9;
         z-index: @ZINDEX_LIGHTBOX_BG;
+    }
+
+    #lightbox-left-arrow,
+    #lightbox-right-arrow {
+        color: @COLOR_TEXT_LIGHT;
+        cursor: pointer;
+        font-size: 40px;
+        width: 50px;
+        z-index: @ZINDEX_LIGHTBOX_ARROW;
+
+        // Center align arrows
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+
+    #lightbox-left-arrow {
+        left: 0;
+    }
+
+    #lightbox-right-arrow {
+        right: 0;
     }
 
     .lightbox-photo {

@@ -50,6 +50,26 @@ body.lightbox-open {
   opacity: 0.9;
   z-index: 3;
 }
+#lightbox-container #lightbox-left-arrow,
+#lightbox-container #lightbox-right-arrow {
+  color: #eee;
+  cursor: pointer;
+  font-size: 40px;
+  width: 50px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+#lightbox-container #lightbox-left-arrow {
+  left: 0;
+}
+#lightbox-container #lightbox-right-arrow {
+  right: 0;
+}
 #lightbox-container .lightbox-photo {
   position: absolute;
   top: 0;
