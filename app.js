@@ -116,6 +116,8 @@ function onOpenLightbox(photo, index) {
     addClass(document.body, 'lightbox-open');
 
     addPhotoElement(photo, 'enter');
+
+    showControls();
 }
 
 function onCloseLightbox() {
@@ -186,6 +188,15 @@ function addPhotoElement(photo, transitionClassName) {
     });
 }
 
+function showControls() {
+    currentPhotoIndex === 0 ?
+        removeClass(LIGHTBOX_LEFT_ARROW_EL, 'is-visible') :
+        addClass(LIGHTBOX_LEFT_ARROW_EL, 'is-visible');
+    currentPhotoIndex + 1 === photos.length ?
+        removeClass(LIGHTBOX_RIGHT_ARROW_EL, 'is-visible') :
+        addClass(LIGHTBOX_RIGHT_ARROW_EL, 'is-visible');
+}
+
 function onPrevPhoto() {
     if (currentPhotoIndex === 0) { return; }
     currentPhotoIndex -= 1;
@@ -195,6 +206,8 @@ function onPrevPhoto() {
     animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-right');
 
     addPhotoElement(photo, 'enter-left');
+
+    showControls();
 }
 
 function onNextPhoto() {
@@ -206,6 +219,8 @@ function onNextPhoto() {
     animatePhotoOut(LIGHTBOX_CONTAINER_EL.lastElementChild, 'exit-left');
 
     addPhotoElement(photo, 'enter-right');
+
+    showControls();
 }
 
 function onKeyDown(e) {

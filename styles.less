@@ -99,13 +99,17 @@ body.lightbox-open {
         z-index: @ZINDEX_LIGHTBOX_ARROW;
 
         // Center align arrows
-        display: flex;
         align-items: center;
         justify-content: center;
 
         position: absolute;
         top: 0;
         bottom: 0;
+
+        display: none;
+        &.is-visible {
+            display: flex;
+        }
     }
 
     #lightbox-left-arrow {

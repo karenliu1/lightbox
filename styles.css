@@ -57,12 +57,16 @@ body.lightbox-open {
   font-size: 40px;
   width: 50px;
   z-index: 5;
-  display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
   top: 0;
   bottom: 0;
+  display: none;
+}
+#lightbox-container #lightbox-left-arrow.is-visible,
+#lightbox-container #lightbox-right-arrow.is-visible {
+  display: flex;
 }
 #lightbox-container #lightbox-left-arrow {
   left: 0;
