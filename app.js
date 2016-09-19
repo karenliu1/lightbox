@@ -171,7 +171,7 @@ function createThumbnailEl(photo, index) {
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
     addClass(photoEl, 'thumbnail');
 
-    var wrapperEl = document.createElement('div');
+    var wrapperEl = document.createElement('button');
     addClass(wrapperEl, 'thumbnail-wrapper is-loading');
     wrapperEl.setAttribute('data-photo-index', index);
     wrapperEl.appendChild(photoEl);

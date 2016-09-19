@@ -142,6 +142,8 @@ body.lightbox-open {
   animation: exitRight 400ms forwards;
 }
 .thumbnail-wrapper {
+  box-sizing: content-box;
+  background-color: #fff;
   cursor: pointer;
   margin: 4px;
   overflow: hidden;
