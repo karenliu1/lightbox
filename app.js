@@ -4,7 +4,8 @@ var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 var DEFAULT_PHOTOSET_ID = '72157639990929493';
 
 var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL,
-    LIGHTBOX_TITLE_EL, LIGHTBOX_LEFT_ARROW_EL, LIGHTBOX_RIGHT_ARROW_EL, MESSAGE_EL;
+    LIGHTBOX_TITLE_EL, LIGHTBOX_LEFT_ARROW_EL, LIGHTBOX_RIGHT_ARROW_EL,
+    MESSAGE_EL, PHOTOSET_TITLE_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
@@ -13,7 +14,7 @@ var currentPhotoIndex = null;
 var lightboxTimeouts = [];
 
 function showMessage(message) {
-    MESSAGE_EL.innerText = message;
+    MESSAGE_EL.textContent = message;
     addClass(MESSAGE_EL, 'is-visible');
 }
 
@@ -102,7 +103,7 @@ function addPhotoElement(photo, transitionClassName) {
     // Set the current title to this photo
     var photoTitleEl = document.createElement('div');
     addClass(photoTitleEl, 'lightbox-photo-title');
-    photoTitleEl.innerText = photo.title;
+    photoTitleEl.textContent = photo.title;
 
     // Create wrapper element (positioned absolutely so they stack while animating)
     var photoEl = document.createElement('div');
@@ -223,6 +224,7 @@ window.onload = function() {
     LIGHTBOX_LEFT_ARROW_EL = document.getElementById('lightbox-left-arrow');
     LIGHTBOX_RIGHT_ARROW_EL = document.getElementById('lightbox-right-arrow');
     MESSAGE_EL = document.getElementById('message');
+    PHOTOSET_TITLE_EL = document.getElementById('photoset-title');
 
     var photoSetId = getUrlSearchValue('photoset') || DEFAULT_PHOTOSET_ID;
 
@@ -238,9 +240,11 @@ window.onload = function() {
 
         hideMessage(); // It was successful; hide any error messages
 
+        PHOTOSET_TITLE_EL.textContent =
+            response.photoset.title + ' by ' + response.photoset.ownername;
+
         photos = response.photoset.photo;
         var photosEls = photos.map(createThumbnailEl);
-
         for (var photoEl of photosEls) {
             PHOTOS_CONTAINER_EL.appendChild(photoEl);
         }

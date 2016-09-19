@@ -4,7 +4,7 @@
 @COLOR_BORDER_LIGHTBOX: #888;
 @COLOR_BORDER_THUMBNAIL: #ddd;
 @COLOR_TEXT_LIGHT: #eee;
-@COLOR_TEXT_DARK: #888;
+@COLOR_TEXT_DARK: #444;
 
 @FONT_SIZE_MD: 14px;
 @FONT_SIZE_LG: 20px;
@@ -55,6 +55,13 @@ body.lightbox-open {
     &.is-visible {
         display: block;
     }
+}
+
+#photoset-title {
+    color: @COLOR_TEXT_DARK;
+    font-size: @FONT_SIZE_LG;
+    margin: @GUTTER_LG 0;
+    text-align: center;
 }
 
 #photos-container {

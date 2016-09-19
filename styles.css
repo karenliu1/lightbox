@@ -18,6 +18,12 @@ body.lightbox-open {
 #message.is-visible {
   display: block;
 }
+#photoset-title {
+  color: #444;
+  font-size: 20px;
+  margin: 32px 0;
+  text-align: center;
+}
 #photos-container {
   margin: 32px auto;
   text-align: center;
@@ -161,7 +167,7 @@ body.lightbox-open {
   bottom: 4px;
   left: 0;
   right: 0;
-  color: #888;
+  color: #444;
   content: "View";
   font-size: 14px;
   z-index: 2;
