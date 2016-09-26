@@ -5,7 +5,7 @@ var DEFAULT_PHOTOSET_ID = '72157639990929493';
 
 var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL,
     LIGHTBOX_TITLE_EL, LIGHTBOX_LEFT_ARROW_EL, LIGHTBOX_RIGHT_ARROW_EL,
-    MESSAGE_EL, PHOTOSET_TITLE_EL;
+    MESSAGE_EL, LOADER_EL, PHOTOSET_TITLE_EL;
 
 var photos = [];
 var currentPhotoIndex = null;
@@ -20,6 +20,14 @@ function showMessage(message) {
 
 function hideMessage() {
     removeClass(MESSAGE_EL, 'is-visible');
+}
+
+function showLoader() {
+    addClass(LOADER_EL, 'is-visible');
+}
+
+function hideLoader() {
+    removeClass(LOADER_EL, 'is-visible');
 }
 
 function registerLightboxTimeout(callback, timeout) {
@@ -219,10 +227,12 @@ window.onload = function() {
     LIGHTBOX_LEFT_ARROW_EL = document.getElementById('lightbox-left-arrow');
     LIGHTBOX_RIGHT_ARROW_EL = document.getElementById('lightbox-right-arrow');
     MESSAGE_EL = document.getElementById('message');
+    LOADER_EL = document.getElementById('loader');
     PHOTOSET_TITLE_EL = document.getElementById('photoset-title');
 
     var photoSetId = getUrlSearchValue('photoset') || DEFAULT_PHOTOSET_ID;
 
+    showLoader();
     requestPhotoset(photoSetId, function(response) {
         if (response.stat === 'fail') {
             if (response.code === 1) {
@@ -234,6 +244,7 @@ window.onload = function() {
         }
 
         hideMessage(); // It was successful; hide any error messages
+        hideLoader();
 
         PHOTOSET_TITLE_EL.textContent =
             response.photoset.title + ' by ' + response.photoset.ownername;
