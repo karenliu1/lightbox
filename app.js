@@ -60,9 +60,15 @@ function requestPhotoset(photosetID, resolve, reject) {
     };
 }
 
+// Prevents scrolling on mobile while the lightbox is open
+function onTouchMoveLightbox(e) {
+    e.preventDefault();
+}
+
 function onOpenLightbox(index) {
     currentPhotoIndex = index;
     addClass(document.body, 'lightbox-open');
+    document.body.addEventListener('touchmove', onTouchMoveLightbox);
     addPhotoElement(photos[index], 'enter');
     showControls();
 }
@@ -70,6 +76,7 @@ function onOpenLightbox(index) {
 function onCloseLightbox() {
     currentPhotoIndex = null;
     removeClass(document.body, 'lightbox-open');
+    document.body.removeEventListener('touchmove', onTouchMoveLightbox);
 
     // Clear all timeouts
     lightboxTimeouts.forEach(clearTimeout);
