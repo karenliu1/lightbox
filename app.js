@@ -66,6 +66,9 @@ function onTouchMoveLightbox(e) {
 }
 
 function onOpenLightbox(index) {
+    // Do nothing if the lightbox is already open (can happen with keyboard shortcuts)
+    if (currentPhotoIndex !== null) { return; }
+
     currentPhotoIndex = index;
     addClass(document.body, 'lightbox-open');
     document.body.addEventListener('touchmove', onTouchMoveLightbox);
