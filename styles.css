@@ -63,15 +63,36 @@ body.lightbox-open {
   opacity: 0.9;
   z-index: 3;
 }
+#lightbox-container #lightbox-close-button,
 #lightbox-container #lightbox-left-arrow,
 #lightbox-container #lightbox-right-arrow {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   color: #eee;
   cursor: pointer;
-  font-size: 40px;
-  width: 50px;
-  z-index: 5;
+  font-family: Arial, sans-serif;
   align-items: center;
   justify-content: center;
+}
+#lightbox-container #lightbox-close-button {
+  font-size: 30px;
+  z-index: 6;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+}
+#lightbox-container #lightbox-left-arrow,
+#lightbox-container #lightbox-right-arrow {
+  font-size: 40px;
+  z-index: 5;
+  width: 50px;
   position: absolute;
   top: 0;
   bottom: 0;

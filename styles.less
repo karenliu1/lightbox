@@ -23,6 +23,7 @@
 @ZINDEX_LIGHTBOX_BG: 3;
 @ZINDEX_LIGHTBOX_PHOTO: 4;
 @ZINDEX_LIGHTBOX_ARROW: 5;
+@ZINDEX_LIGHTBOX_CLOSE: 6;
 
 .positionFill() {
     position: absolute;
@@ -30,6 +31,15 @@
     right: 0;
     bottom: 0;
     left: 0;
+}
+
+.user-select (@val) {
+    -webkit-touch-callout:  @val;
+    -webkit-user-select:    @val;
+    -khtml-user-select:     @val;
+    -moz-user-select:       @val;
+    -ms-user-select:        @val;
+    user-select:            @val;
 }
 
 body {
@@ -106,22 +116,46 @@ body.lightbox-open {
         z-index: @ZINDEX_LIGHTBOX_BG;
     }
 
+    #lightbox-close-button,
     #lightbox-left-arrow,
     #lightbox-right-arrow {
+        .user-select(none);
         color: @COLOR_TEXT_LIGHT;
         cursor: pointer;
-        font-size: 40px;
-        width: 50px;
-        z-index: @ZINDEX_LIGHTBOX_ARROW;
+        font-family: Arial, sans-serif;
 
-        // Center align arrows
+        // Center align content
         align-items: center;
         justify-content: center;
+    }
+
+    #lightbox-close-button {
+        font-size: 30px;
+        z-index: @ZINDEX_LIGHTBOX_CLOSE;
+
+        width: 50px;
+        height: 50px;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        display: flex;
+    }
+
+    #lightbox-left-arrow,
+    #lightbox-right-arrow {
+        font-size: 40px;
+        z-index: @ZINDEX_LIGHTBOX_ARROW;
+
+        width: 50px;
+        // Height of click target extends from top to bottom of screen
 
         position: absolute;
         top: 0;
         bottom: 0;
 
+        // First and last photos don't have arrows
         display: none;
         &.is-visible {
             display: flex;
