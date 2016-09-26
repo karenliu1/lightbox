@@ -185,10 +185,15 @@ body.lightbox-open {
   opacity: 0;
   transition: opacity 200ms;
 }
-.thumbnail-wrapper:hover {
+.thumbnail-wrapper:focus {
+  outline: 0;
+}
+.thumbnail-wrapper:hover,
+.thumbnail-wrapper:focus {
   transform: rotate(0);
 }
-.thumbnail-wrapper:hover::before {
+.thumbnail-wrapper:hover::before,
+.thumbnail-wrapper:focus::before {
   opacity: 1;
 }
 @keyframes enter {

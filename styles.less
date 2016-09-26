@@ -257,7 +257,11 @@ body.lightbox-open {
         transition: opacity @TRANSITION_FAST; // For fading on hover
     }
 
-    &:hover {
+    &:focus {
+        outline: 0;
+    }
+
+    &:hover, &:focus {
         transform: rotate(0);
 
         &::before {
