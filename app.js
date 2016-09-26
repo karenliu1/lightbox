@@ -2,6 +2,7 @@ var TRANSITION_PHOTO_MS = 400;
 var FLICKR_HOST = 'https://api.flickr.com/services/rest/';
 var FLICKR_API_KEY = '54ae5507d84488bba4a35fa02d93b6f2';
 var DEFAULT_PHOTOSET_ID = '72157639990929493';
+var SWIPE_DISTANCE_PX = 30; // How far you must move your finger to navigate
 
 var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL,
     LIGHTBOX_TITLE_EL, LIGHTBOX_LEFT_ARROW_EL, LIGHTBOX_RIGHT_ARROW_EL,
@@ -9,6 +10,7 @@ var PHOTOS_CONTAINER_EL, LIGHTBOX_CONTAINER_EL, LIGHTBOX_PHOTO_EL,
 
 var photos = [];
 var currentPhotoIndex = null;
+var touchStartX = null;
 
 // Animation timeouts from lightbox actions. Clear all of these when closing the lightbox.
 var lightboxTimeouts = [];
@@ -174,6 +176,28 @@ function onKeyDown(e) {
     }
 }
 
+function onTouchStart(e) {
+    // Do nothing if the lightbox is not open
+    if (currentPhotoIndex === null) { return; }
+
+    touchStartX = e.changedTouches[0].screenX;
+}
+
+function onTouchEnd(e) {
+    // Do nothing if the lightbox is not open, or we don't have the start
+    // position for some reason
+    if (currentPhotoIndex === null || touchStartX === null) { return; }
+
+    var touchEndX = e.changedTouches[0].screenX;
+    if (touchEndX - touchStartX > SWIPE_DISTANCE_PX) {
+        onPrevPhoto();
+    } else if (touchStartX - touchEndX > SWIPE_DISTANCE_PX) {
+        onNextPhoto();
+    }
+
+    touchStartX = null;
+}
+
 function createThumbnailEl(photo, index) {
     var photoEl = document.createElement('img');
     photoEl.setAttribute('src', getPhotoUrl(photo, 'q'));
@@ -217,6 +241,8 @@ function initAppHandlers() {
         }
     }
     document.addEventListener('keydown', onKeyDown, false);
+    document.addEventListener('touchstart', onTouchStart, false);
+    document.addEventListener('touchend', onTouchEnd, false);
 }
 
 window.onload = function() {
