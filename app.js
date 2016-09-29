@@ -270,6 +270,8 @@ window.onload = function() {
 
     showLoader();
     requestPhotoset(photoSetId, function(response) {
+        hideLoader();
+
         if (response.stat === 'fail') {
             if (response.code === 1) {
                 showMessage('The photoset was not found.');
@@ -280,7 +282,6 @@ window.onload = function() {
         }
 
         hideMessage(); // It was successful; hide any error messages
-        hideLoader();
 
         PHOTOSET_TITLE_EL.textContent =
             response.photoset.title + ' by ' + response.photoset.ownername;
@@ -292,6 +293,7 @@ window.onload = function() {
         });
     }, function(errorStatus) {
         showMessage('There was a problem loading the photoset.');
+        hideLoader();
     });
 
     initAppHandlers();
