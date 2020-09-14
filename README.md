@@ -5,7 +5,7 @@ Browse photos in Flickr photosets.
 ## Usage
 
 * Enter the photoset ID in the URL. For example,
-[karenliu1.github.io/lightbox/?photoset=72157655610773292](https://karenliu1.github.io/lightbox/?photoset=72157655610773292)
+[liukaren.github.io/lightbox/?photoset=72157655610773292](https://karenliu1.github.io/lightbox/?photoset=72157655610773292)
 * Use keyboard arrow keys or on-screen arrows to navigate
 * Use ESC key or click background to close the lightbox
 
